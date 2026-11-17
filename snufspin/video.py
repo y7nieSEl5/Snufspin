@@ -1,6 +1,7 @@
 import json
 import math
 import subprocess
+from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -46,3 +47,23 @@ def probe_video(path: Path) -> Video:
 
     start = timestamps[0]
     return Video(path, stream["width"], stream["height"], tuple(t - start for t in timestamps))
+
+
+def decode_bgr_frames(video: Video) -> Iterator[bytes]:
+    """Stream one encoded-size BGR image for each probed presentation frame."""
+    import cv2
+
+    camera = cv2.VideoCapture(str(video.path))
+    camera.set(cv2.CAP_PROP_ORIENTATION_AUTO, 0)
+    try:
+        for frame_index in range(len(video.timestamps_s)):
+            ok, frame = camera.read()
+            if not ok:
+                raise ValueError(f"video ended before probed frame {frame_index} could be decoded")
+            if frame.shape != (video.height, video.width, 3):
+                raise ValueError("decoded frame dimensions do not match ffprobe metadata")
+            yield frame.tobytes()
+        if camera.read()[0]:
+            raise ValueError("decoded more video frames than were found by ffprobe")
+    finally:
+        camera.release()

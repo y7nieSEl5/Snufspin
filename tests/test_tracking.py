@@ -1,3 +1,4 @@
+import importlib.util
 import json
 import subprocess
 import tempfile
@@ -6,7 +7,7 @@ from pathlib import Path
 
 from snufspin.overlay import render_overlay
 from snufspin.tracking import BallPoint, read_ball_track, track_report
-from snufspin.video import Video, probe_video
+from snufspin.video import Video, decode_bgr_frames, probe_video
 
 
 class TrackingTests(unittest.TestCase):
@@ -31,6 +32,10 @@ class TrackingTests(unittest.TestCase):
                 "-vf", "select='eq(n,0)+eq(n,3)+eq(n,12)'", "-fps_mode", "vfr", str(source),
             ], check=True)
             video = probe_video(source)
+            if importlib.util.find_spec("cv2") is not None:
+                decoded = list(decode_bgr_frames(video))
+                self.assertEqual(len(decoded), len(video.timestamps_s))
+                self.assertTrue(all(len(frame) == video.width * video.height * 3 for frame in decoded))
             render_overlay(video, (BallPoint(1, 50, 50, "measured"),), output)
             self.assertEqual(probe_video(output).timestamps_s, (0.0, 0.1, 0.4))
             frames = subprocess.check_output([

@@ -9,6 +9,7 @@ from .pipeline import MetricPoint, MetricTrack, Shot, ShotLabels, analyze
 from .repair import interpolate_short_gaps
 from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
+from .tracknet import run_tracknet
 from .video import probe_video
 
 
@@ -54,10 +55,20 @@ def main() -> None:
     repair.add_argument("video", type=Path)
     repair.add_argument("--ball-track", type=Path, required=True)
     repair.add_argument("--max-gap-s", type=float, default=0.15)
+    tracking = commands.add_parser("track", help="run the ball detector locally from Python")
+    tracking.add_argument("video", type=Path)
+    tracking.add_argument("--model-source", type=Path, required=True)
+    tracking.add_argument("--weights", type=Path, required=True)
+    tracking.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
+    tracking.add_argument("--threads", type=int, default=4)
     args = parser.parse_args()
 
     try:
         video = probe_video(args.video)
+        if args.command == "track":
+            report = run_tracknet(video, args.model_source, args.weights, args.device, args.threads)
+            print(json.dumps(report, indent=2, allow_nan=False))
+            return
         if args.command == "interpolate-track":
             report = json.loads(args.ball_track.read_text(encoding="utf-8"))
             result = interpolate_short_gaps(video, report, args.max_gap_s)
@@ -96,7 +107,7 @@ def main() -> None:
         print(json.dumps(output, indent=2, allow_nan=False))
     except subprocess.CalledProcessError as error:
         parser.exit(1, f"{error.cmd[0]} could not process {args.video}: {error.stderr.strip()}\n")
-    except (OSError, AttributeError, ValueError, TypeError, KeyError) as error:
+    except (OSError, AttributeError, ValueError, TypeError, KeyError, RuntimeError) as error:
         parser.exit(1, f"snufspin: {error}\n")
 
 

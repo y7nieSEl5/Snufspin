@@ -40,7 +40,7 @@ def index_ball_points(video: Video, points: tuple[BallPoint, ...]) -> dict[int, 
     return by_frame
 
 
-def track_report(video: Video, points: tuple[BallPoint, ...], source: dict[str, str]) -> dict:
+def track_report(video: Video, points: tuple[BallPoint, ...], source: dict[str, object]) -> dict:
     by_frame = index_ball_points(video, points)
     return {
         "schema_version": 1,

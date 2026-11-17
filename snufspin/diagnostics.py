@@ -50,7 +50,7 @@ def diagnose(video, report, review, model_source, weights):
             tensor = torch.from_numpy(stack.transpose(2, 0, 1)).unsqueeze(0)
             with torch.inference_mode():
                 heat = model(tensor).argmax(dim=1).reshape(360, 640).numpy()
-            # Reproduce the pinned tennis-vision notebook's conversion exactly.
+            # Reproduce the pinned tennis-vision detector's conversion exactly.
             mask = cv2.threshold((heat * 255).astype(np.uint8), 127, 255, cv2.THRESH_BINARY)[1]
             circles = cv2.HoughCircles(
                 mask, cv2.HOUGH_GRADIENT, dp=1, minDist=1, param1=50,
