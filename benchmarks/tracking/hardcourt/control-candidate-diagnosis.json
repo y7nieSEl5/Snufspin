@@ -6,12 +6,10 @@
   "frames": [
     {
       "frame": 33,
-      "label": "visible",
+      "label": "hidden",
       "cause": "no_hough_candidate",
       "circles": [],
-      "component_candidates": [],
-      "recorded_error_px": null,
-      "closest_circle_error_px": null
+      "component_candidates": []
     },
     {
       "frame": 45,

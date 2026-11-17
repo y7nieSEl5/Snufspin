@@ -4,9 +4,7 @@
     {
       "frame": 33,
       "timestamp_s": 0.55055,
-      "status": "visible",
-      "x_px": 762,
-      "y_px": 268
+      "status": "hidden"
     },
     {
       "frame": 45,

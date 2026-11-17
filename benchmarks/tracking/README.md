@@ -16,7 +16,7 @@ Short-gap interpolation was tested with a maximum endpoint separation of 0.15 se
 | Hardcourt | 14 | 13 | 2 | 0 | 11 | 0 → 0 |
 | Clay | 13 | 11 | 10 | 0 | 1 | 0 → 0 |
 
-Interpolation is promising for short hardcourt gaps. It adds a box on hidden grass frame 36 and carries some incorrect endpoints through other frames. The results support keeping it experimental. Correct candidate selection and image-supported gap recovery need further testing before enabling a replacement tracker.
+Interpolation is promising for short hardcourt gaps. It adds an inferred position on hidden grass frame 36 and carries some incorrect endpoints through other frames. A hidden label provides no visible center for validating an inferred position. The results support keeping interpolation experimental while candidate selection and image-supported gap recovery undergo further testing.
 
 ## Candidate-extraction diagnosis
 
@@ -30,9 +30,11 @@ The next comparison should test image-supported recovery with the same weights, 
 
 The four grass control frames all have measured detections. Three are within 5 source pixels of the manual center. Frame 74 differs by 16.49 pixels. Interpolation yields the same errors on this sample because it fills missing positions only. The control sample is small, and the additional localization error supports checking image evidence before trusting nearby detections as gap endpoints. The grass control labels and evaluations are saved in `grass/control-review.json` and `grass/control-results.json`.
 
-Across all three control samples, the baseline has one miss among 12 visible frames, eight positions within 5 source pixels, and nine within 10 pixels. Interpolation fills the missing hardcourt frame 33 with a position 32.98 pixels from the manual label. Its count within 10 pixels stays at nine. This adds a second concrete failure case for adopting ungated interpolation, alongside hidden grass frame 36 in the original review.
+The user corrected hardcourt control frame 33 from visible to hidden after identifying the original annotation as a highlight spot. The previous 32.98-pixel disagreement with that annotation is excluded from localization metrics. The interpolated position at (770, 300) was judged plausible by the user. Its localization accuracy remains unmeasured because the ball center is hidden.
 
-The isolated centroid selection probe has one miss, nine control positions within 5 pixels, and nine within 10 pixels. Grass frame 74 worsens from 16.49 to 19.38 pixels. Hardcourt frame 33 has neither a Hough-circle nor a connected-component candidate. These results support testing image-supported recovery before adopting either post-processing change. The candidate probe continues to use cached baseline history, so it needs a subsequent full-sequence comparison using its own previous outputs. Each clip's `control-candidate-diagnosis.json` records the rerun and errors.
+Across all three corrected control samples there are 11 visible labels and one hidden label. The baseline detects all 11 visible balls, with eight positions within 5 source pixels and nine within 10 pixels. Interpolation produces the same visible-frame results and adds an inferred position at hidden frame 33. The `hidden_with_position` count records such positions without assigning them a localization error.
+
+The isolated centroid selection probe also detects all 11 visible control balls, with nine positions within 5 pixels and nine within 10 pixels. Grass frame 74 worsens from 16.49 to 19.38 pixels. Hardcourt frame 33 has neither a Hough-circle nor a connected-component candidate. The remaining visible-frame errors and grass hand-latching cases support testing image-supported recovery. The candidate probe continues to use cached baseline history, so it needs a subsequent full-sequence comparison using its own previous outputs. Each clip's `control-candidate-diagnosis.json` records the rerun and errors.
 
 ## Reproduction
 

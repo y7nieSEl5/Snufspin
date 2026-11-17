@@ -38,7 +38,7 @@ The report counts missing positions on visible frames, positions on hidden frame
 
 ## Tracking experiments
 
-The current decision is to improve tracking before using it for 3D reconstruction. The reviewed cases include long gaps and a track that follows the far player's hand. The first post-processing experiment adds short, bracketed interpolations. It improves some reviewed gaps and introduces an incorrect position on a hidden frame in grass. The command is available explicitly for comparing results. [Experiment findings](benchmarks/tracking/README.md)
+The current decision is to improve tracking before using it for 3D reconstruction. The reviewed cases include long gaps and a track that follows the far player's hand. The first post-processing experiment adds short, bracketed interpolations. It improves some reviewed gaps and adds an inferred position on a hidden frame in grass. Hidden frames provide no visible center for assessing localization error. The command is available explicitly for comparing results. [Experiment findings](benchmarks/tracking/README.md)
 
 ```sh
 python -m snufspin interpolate-track outputs/tennis-vision-baseline/source.mp4 \

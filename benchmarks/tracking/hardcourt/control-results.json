@@ -3,9 +3,9 @@
     "video_sha256": "310f4084f667c78dc50a5bdca3f21cc99af2a1a7988bfa81af2155e219b90805",
     "scope": "manually_selected_review_frames",
     "reviewed_frames": 4,
-    "visible_frames": 4,
-    "hidden_frames": 0,
-    "visible_without_position": 1,
+    "visible_frames": 3,
+    "hidden_frames": 1,
+    "visible_without_position": 0,
     "hidden_with_position": 0,
     "localized_within_px": {
       "5": 3,
@@ -17,7 +17,7 @@
       {
         "frame": 33,
         "timestamp_s": 0.55055,
-        "label": "visible",
+        "label": "hidden",
         "has_position": false,
         "provenance": null,
         "error_px": null
@@ -52,24 +52,24 @@
     "video_sha256": "310f4084f667c78dc50a5bdca3f21cc99af2a1a7988bfa81af2155e219b90805",
     "scope": "manually_selected_review_frames",
     "reviewed_frames": 4,
-    "visible_frames": 4,
-    "hidden_frames": 0,
+    "visible_frames": 3,
+    "hidden_frames": 1,
     "visible_without_position": 0,
-    "hidden_with_position": 0,
+    "hidden_with_position": 1,
     "localized_within_px": {
       "5": 3,
       "10": 3,
       "20": 3
     },
-    "mean_error_px_when_position_present": 10.071352021171764,
+    "mean_error_px_when_position_present": 2.433521026581923,
     "frames": [
       {
         "frame": 33,
         "timestamp_s": 0.55055,
-        "label": "visible",
+        "label": "hidden",
         "has_position": true,
         "provenance": "interpolated",
-        "error_px": 32.984845004941285
+        "error_px": null
       },
       {
         "frame": 45,
