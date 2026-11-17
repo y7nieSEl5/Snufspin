@@ -50,6 +50,8 @@ python -m snufspin evaluate-track outputs/tennis-vision-baseline/source.mp4 \
 
 Added positions have `interpolated` provenance. The command preserves existing positions, skips unbracketed and longer gaps, and leaves its input untouched. Its gap limit measures the entire time between the endpoint detections.
 
+When rendering an interpolated track, green boxes show detector observations and gold boxes show interpolated positions. Frames with no position have no box.
+
 ## Run the example
 
 This example uses the Python standard library and FFmpeg with `ffprobe` on your `PATH`.

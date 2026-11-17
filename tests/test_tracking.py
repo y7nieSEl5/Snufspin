@@ -42,3 +42,28 @@ class TrackingTests(unittest.TestCase):
             self.assertEqual(frames[green_channel], 0)
             self.assertGreater(frames[frame_size + green_channel], 150)
             self.assertEqual(frames[frame_size * 2 + green_channel], 0)
+
+    def test_overlay_marks_interpolation_when_position_stays_the_same(self):
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "source.mp4"
+            output = Path(directory) / "overlay.mp4"
+            subprocess.run([
+                "ffmpeg", "-v", "error", "-f", "lavfi", "-i", "color=s=320x180:r=10:d=0.3",
+                str(source),
+            ], check=True)
+            video = probe_video(source)
+            render_overlay(video, (
+                BallPoint(0, 50, 50, "measured"),
+                BallPoint(1, 50, 50, "interpolated"),
+                BallPoint(2, 50, 50, "measured"),
+            ), output)
+            frames = subprocess.check_output([
+                "ffmpeg", "-v", "error", "-i", str(output), "-pix_fmt", "rgb24",
+                "-f", "rawvideo", "pipe:1",
+            ])
+            frame_size = 320 * 180 * 3
+            offset = ((45 * 320) + 50) * 3
+            red = [frames[index * frame_size + offset] for index in range(3)]
+            self.assertLess(red[0], 100)
+            self.assertGreater(red[1], 150)
+            self.assertLess(red[2], 100)

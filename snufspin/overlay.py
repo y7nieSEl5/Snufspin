@@ -15,16 +15,19 @@ def render_overlay(video: Video, points: tuple[BallPoint, ...], output: Path) ->
     commands = []
     hidden = (-24, -24)
     previous_position = hidden
+    previous_color = "lime"
     for frame, time_s in enumerate(video.timestamps_s):
         point = by_frame.get(frame)
         position = hidden if point is None else (round(point.x_px) - 5, round(point.y_px) - 5)
-        if position == previous_position:
+        color = "gold" if point is not None and point.provenance == "interpolated" else "lime"
+        if position == previous_position and color == previous_color:
             continue
         # Schedule between frame times to avoid timestamp rounding at a boundary.
         start = (video.time_at(frame - 1) + time_s) / 2 if frame else 0
         x, y = position
-        commands.append(f"{start:.6f} drawbox@ball x {x}, drawbox@ball y {y};")
+        commands.append(f"{start:.6f} drawbox@ball x {x}, drawbox@ball y {y}, drawbox@ball color {color};")
         previous_position = position
+        previous_color = color
 
     filters = ["setpts=PTS-STARTPTS"]
     if commands:
