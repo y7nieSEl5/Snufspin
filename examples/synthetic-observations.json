@@ -1,0 +1,45 @@
+{
+  "source": {
+    "kind": "synthetic",
+    "notes": "Illustrative labels and coordinates for the generated test clip."
+  },
+  "ball_track": [
+    {"frame": 0, "x_px": 70, "y_px": 125, "provenance": "manual"},
+    {"frame": 15, "x_px": 120, "y_px": 100, "provenance": "interpolated"},
+    {"frame": 30, "x_px": 160, "y_px": 85, "provenance": "manual"},
+    {"frame": 60, "x_px": 210, "y_px": 90, "provenance": "manual"},
+    {"frame": 90, "x_px": 178, "y_px": 108, "provenance": "manual"}
+  ],
+  "shots": [
+    {
+      "contact_frame": 0,
+      "end_frame": 30,
+      "end_event": "contact",
+      "labels": {
+        "stroke": "forehand",
+        "intent": "drive",
+        "spin": ["topspin", "sidespin"],
+        "source": "synthetic"
+      },
+      "metric_track": {
+        "method": "synthetic",
+        "samples": [
+          {"frame": 0, "x_m": 0.0, "y_m": 0.0, "z_m": 1.0},
+          {"frame": 15, "x_m": 3.0, "y_m": 4.0, "z_m": 1.0},
+          {"frame": 30, "x_m": 6.0, "y_m": 8.0, "z_m": 1.0}
+        ]
+      }
+    },
+    {
+      "contact_frame": 60,
+      "end_frame": 90,
+      "end_event": "bounce",
+      "labels": {
+        "stroke": "backhand",
+        "intent": "drop_shot",
+        "spin": null,
+        "source": "synthetic"
+      }
+    }
+  ]
+}
