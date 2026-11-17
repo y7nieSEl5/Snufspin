@@ -26,9 +26,13 @@ A second diagnostic extracts connected-component centroids from the same binary 
 
 The centroid probe helps some reviewed frames, including clay 32 and 33 and hardcourt 44. It still follows the hand in much of the grass interval, and most missing frames have no usable component. Its use of baseline history and the selected review set limits conclusions about end-to-end improvement. Per-frame candidate coordinates and errors are in each clip's `candidate-diagnosis.json`.
 
-The next comparison should test image-supported recovery with the same weights, retain raw observations, and keep all inferred points identifiable. Before adopting changed candidate selection, label the 12 previously unreviewed control frames in `control-selection.json`. These were sampled without replacement with a fixed seed and exclude the original review frames. Grass controls have been labeled. The eight hardcourt and clay control labels remain pending.
+The next comparison should test image-supported recovery with the same weights, retain raw observations, and keep all inferred points identifiable. All 12 control frames in `control-selection.json` have now been labeled. These were sampled without replacement with a fixed seed and exclude the original review frames.
 
 The four grass control frames all have measured detections. Three are within 5 source pixels of the manual center. Frame 74 differs by 16.49 pixels. Interpolation yields the same errors on this sample because it fills missing positions only. The control sample is small, and the additional localization error supports checking image evidence before trusting nearby detections as gap endpoints. The grass control labels and evaluations are saved in `grass/control-review.json` and `grass/control-results.json`.
+
+Across all three control samples, the baseline has one miss among 12 visible frames, eight positions within 5 source pixels, and nine within 10 pixels. Interpolation fills the missing hardcourt frame 33 with a position 32.98 pixels from the manual label. Its count within 10 pixels stays at nine. This adds a second concrete failure case for adopting ungated interpolation, alongside hidden grass frame 36 in the original review.
+
+The isolated centroid selection probe has one miss, nine control positions within 5 pixels, and nine within 10 pixels. Grass frame 74 worsens from 16.49 to 19.38 pixels. Hardcourt frame 33 has neither a Hough-circle nor a connected-component candidate. These results support testing image-supported recovery before adopting either post-processing change. The candidate probe continues to use cached baseline history, so it needs a subsequent full-sequence comparison using its own previous outputs. Each clip's `control-candidate-diagnosis.json` records the rerun and errors.
 
 ## Reproduction
 

@@ -1,0 +1,100 @@
+{
+  "baseline": {
+    "video_sha256": "23002e1dc48b61c1c971054638cabc26b680aa39fabf864d385b642241187dc6",
+    "scope": "manually_selected_review_frames",
+    "reviewed_frames": 4,
+    "visible_frames": 4,
+    "hidden_frames": 0,
+    "visible_without_position": 0,
+    "hidden_with_position": 0,
+    "localized_within_px": {
+      "5": 2,
+      "10": 3,
+      "20": 4
+    },
+    "mean_error_px_when_position_present": 6.546740500871362,
+    "frames": [
+      {
+        "frame": 3,
+        "timestamp_s": 0.12,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 4.123105625617661
+      },
+      {
+        "frame": 9,
+        "timestamp_s": 0.36000000000000004,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 4.47213595499958
+      },
+      {
+        "frame": 59,
+        "timestamp_s": 2.36,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 12.206555615733702
+      },
+      {
+        "frame": 73,
+        "timestamp_s": 2.92,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 5.385164807134504
+      }
+    ]
+  },
+  "short_gap_interpolation": {
+    "video_sha256": "23002e1dc48b61c1c971054638cabc26b680aa39fabf864d385b642241187dc6",
+    "scope": "manually_selected_review_frames",
+    "reviewed_frames": 4,
+    "visible_frames": 4,
+    "hidden_frames": 0,
+    "visible_without_position": 0,
+    "hidden_with_position": 0,
+    "localized_within_px": {
+      "5": 2,
+      "10": 3,
+      "20": 4
+    },
+    "mean_error_px_when_position_present": 6.546740500871362,
+    "frames": [
+      {
+        "frame": 3,
+        "timestamp_s": 0.12,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 4.123105625617661
+      },
+      {
+        "frame": 9,
+        "timestamp_s": 0.36000000000000004,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 4.47213595499958
+      },
+      {
+        "frame": 59,
+        "timestamp_s": 2.36,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 12.206555615733702
+      },
+      {
+        "frame": 73,
+        "timestamp_s": 2.92,
+        "label": "visible",
+        "has_position": true,
+        "provenance": "measured",
+        "error_px": 5.385164807134504
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "video_sha256": "23002e1dc48b61c1c971054638cabc26b680aa39fabf864d385b642241187dc6",
+  "corrections": [
+    {
+      "frame": 3,
+      "timestamp_s": 0.12,
+      "status": "visible",
+      "x_px": 710,
+      "y_px": 237
+    },
+    {
+      "frame": 9,
+      "timestamp_s": 0.36000000000000004,
+      "status": "visible",
+      "x_px": 799,
+      "y_px": 365
+    },
+    {
+      "frame": 59,
+      "timestamp_s": 2.36,
+      "status": "visible",
+      "x_px": 609,
+      "y_px": 178
+    },
+    {
+      "frame": 73,
+      "timestamp_s": 2.92,
+      "status": "visible",
+      "x_px": 1046,
+      "y_px": 387
+    }
+  ]
+}
