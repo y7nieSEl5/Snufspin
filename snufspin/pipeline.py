@@ -2,16 +2,8 @@ from dataclasses import asdict, dataclass
 from math import dist, isfinite
 from typing import Callable
 
+from .tracking import BallPoint, index_ball_points
 from .video import Video
-
-
-@dataclass(frozen=True)
-class BallPoint:
-    frame: int
-    x_px: float
-    y_px: float
-    provenance: str
-    confidence: float | None = None
 
 
 @dataclass(frozen=True)
@@ -104,18 +96,7 @@ def analyze(
     classify: Classifier = supplied_labels,
     reconstruct: Reconstructor = supplied_metric_track,
 ) -> list[dict]:
-    points_by_frame = {}
-    for point in ball_track:
-        video.time_at(point.frame)
-        if point.frame in points_by_frame:
-            raise ValueError(f"multiple ball points for frame {point.frame}")
-        if not (0 <= point.x_px < video.width and 0 <= point.y_px < video.height):
-            raise ValueError(f"ball point outside the image at frame {point.frame}")
-        if point.provenance not in {"manual", "measured", "interpolated", "predicted"}:
-            raise ValueError(f"invalid ball point provenance: {point.provenance!r}")
-        if point.confidence is not None and not 0 <= point.confidence <= 1:
-            raise ValueError(f"invalid ball point confidence at frame {point.frame}")
-        points_by_frame[point.frame] = point
+    points_by_frame = index_ball_points(video, ball_track)
 
     results = []
     previous_end = -1
