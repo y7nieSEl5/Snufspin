@@ -1,10 +1,31 @@
 # Snufspin
 
-Snufspin is an offline tennis shot analysis framework. The current CLI takes a local video and a JSON sidecar of observations, then produces a timestamped shot report. The sidecar supplies ball tracks, shot boundaries, and any labels or metric trajectories you have. This gives manual annotations and future models the same path through the pipeline.
+Snufspin is an offline tennis shot analysis framework. The first tracking backend is tennis-vision. Snufspin imports its 2D ball detections and renders an overlay for review. The shot analysis command also accepts manual observations, with optional shot labels and metric trajectories.
+
+## Run the tennis-vision baseline
+
+Start with a short, upright, fixed-camera MP4. Use a clip with the orientation baked into the pixels so the detector and overlay see the same image coordinates.
+
+1. Open the Phase 1 notebook in Colab and choose a GPU runtime. In the **Upload input video** section, set `input_video` to your clip’s path on Drive or use the browser upload option. Run the notebook and download its `upstream.npz`. [tennis-vision Phase 1 notebook](https://colab.research.google.com/github/philippdubach/tennis-vision/blob/a501953194f5207534273c7b2b59c0b642df7a05/scripts/colab_run.ipynb)
+2. Put the artifact and the exact MP4 processed by the notebook under `data/`. From the Snufspin repository root, run the importer and renderer locally with Python 3.10+ and FFmpeg (`ffprobe` and `libx264` included).
+
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install numpy
+mkdir -p outputs
+python -m snufspin import-tennis-vision data/clip.mp4 data/upstream.npz > outputs/ball-track.json
+python -m snufspin render data/clip.mp4 --ball-track outputs/ball-track.json \
+  --output outputs/overlay.mp4
+```
+
+`ball-track.json` records frame timestamps from the original video, detections in source pixels, and SHA-256 hashes for the video and artifact. The green box appears on frames with a detection. Missed frames stay empty, following CourtVision’s distinction between observations and filled gaps. Snufspin reads the numeric ball track and clip identity from `upstream.npz` with pickle disabled. Keep the upstream artifact if you need its court, player, or bounce outputs later.
+
+The same cached track can be passed to `analyze --ball-track outputs/ball-track.json` alongside a shot observation file when you begin annotating flight windows.
 
 ## Run the example
 
-From the repository root, use Python 3.10+ and FFmpeg with `ffprobe` on your `PATH`. The Python code uses the standard library.
+This example uses the Python standard library and FFmpeg with `ffprobe` on your `PATH`.
 
 ```sh
 mkdir -p data outputs
