@@ -1,0 +1,724 @@
+{
+  "video_sha256": "972bc29f6c0ff7c4399e8e42d78f6f9f3ba20194f0c0a76270953d97f5116390",
+  "weights_sha256": "c735bc1a1b13a35f179c6492f778ef4ebb9bffd512a96f4d970b32e076653076",
+  "model_sha256": "8cc773f84f9fc96b63a2945c3150e5492ef0be07f8be2485ed624295be804263",
+  "scope": "isolated_reviewed_frames_with_cached_baseline_history",
+  "frames": [
+    {
+      "frame": 25,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          439.0,
+          203.0
+        ],
+        [
+          439.0,
+          217.0
+        ],
+        [
+          453.0,
+          203.0
+        ],
+        [
+          453.0,
+          217.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          446.0,
+          210.0
+        ]
+      ],
+      "recorded_error_px": 6.0,
+      "closest_circle_error_px": 6.0,
+      "component_selected_error_px": 7.0710678118654755
+    },
+    {
+      "frame": 26,
+      "label": "visible",
+      "cause": "no_hough_candidate",
+      "circles": [],
+      "component_candidates": [],
+      "recorded_error_px": null,
+      "closest_circle_error_px": null
+    },
+    {
+      "frame": 27,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          453.0,
+          195.0
+        ],
+        [
+          447.0,
+          193.0
+        ],
+        [
+          455.0,
+          189.0
+        ],
+        [
+          447.0,
+          189.0
+        ],
+        [
+          447.0,
+          197.0
+        ],
+        [
+          447.0,
+          211.0
+        ],
+        [
+          451.0,
+          199.0
+        ],
+        [
+          437.0,
+          195.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          440.0,
+          195.0
+        ],
+        [
+          446.0,
+          194.0
+        ],
+        [
+          451.0,
+          200.0
+        ]
+      ],
+      "recorded_error_px": 19.697715603592208,
+      "closest_circle_error_px": 8.246211251235321,
+      "component_selected_error_px": 9.433981132056603
+    },
+    {
+      "frame": 28,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          461.0,
+          187.0
+        ],
+        [
+          459.0,
+          193.0
+        ],
+        [
+          447.0,
+          201.0
+        ],
+        [
+          455.0,
+          189.0
+        ],
+        [
+          449.0,
+          199.0
+        ],
+        [
+          451.0,
+          197.0
+        ],
+        [
+          455.0,
+          193.0
+        ],
+        [
+          459.0,
+          189.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          450.0,
+          191.0
+        ],
+        [
+          454.0,
+          194.0
+        ],
+        [
+          457.0,
+          198.0
+        ]
+      ],
+      "recorded_error_px": 32.64965543462902,
+      "closest_circle_error_px": 15.033296378372908,
+      "component_selected_error_px": 23.40939982143925
+    },
+    {
+      "frame": 29,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          457.0,
+          197.0
+        ],
+        [
+          453.0,
+          193.0
+        ],
+        [
+          455.0,
+          199.0
+        ],
+        [
+          453.0,
+          197.0
+        ],
+        [
+          451.0,
+          199.0
+        ],
+        [
+          451.0,
+          195.0
+        ],
+        [
+          451.0,
+          191.0
+        ],
+        [
+          445.0,
+          189.0
+        ],
+        [
+          465.0,
+          213.0
+        ],
+        [
+          449.0,
+          207.0
+        ],
+        [
+          447.0,
+          191.0
+        ],
+        [
+          445.0,
+          213.0
+        ],
+        [
+          469.0,
+          205.0
+        ],
+        [
+          447.0,
+          209.0
+        ],
+        [
+          459.0,
+          207.0
+        ],
+        [
+          461.0,
+          205.0
+        ],
+        [
+          447.0,
+          195.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          455.1272727272727,
+          195.78181818181818
+        ]
+      ],
+      "recorded_error_px": 27.459060435491963,
+      "closest_circle_error_px": 18.384776310850235,
+      "component_selected_error_px": 25.885239420077045
+    },
+    {
+      "frame": 30,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          459.0,
+          193.0
+        ],
+        [
+          457.0,
+          195.0
+        ],
+        [
+          461.0,
+          195.0
+        ],
+        [
+          453.0,
+          199.0
+        ],
+        [
+          451.0,
+          201.0
+        ],
+        [
+          455.0,
+          193.0
+        ],
+        [
+          451.0,
+          189.0
+        ],
+        [
+          469.0,
+          207.0
+        ],
+        [
+          445.0,
+          207.0
+        ],
+        [
+          469.0,
+          183.0
+        ],
+        [
+          449.0,
+          179.0
+        ],
+        [
+          473.0,
+          203.0
+        ],
+        [
+          443.0,
+          187.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          457.82608695652175,
+          194.17391304347825
+        ]
+      ],
+      "recorded_error_px": 32.01562118716424,
+      "closest_circle_error_px": 18.027756377319946,
+      "component_selected_error_px": 30.59723723273056
+    },
+    {
+      "frame": 31,
+      "label": "hidden",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          459.0,
+          191.0
+        ],
+        [
+          463.0,
+          185.0
+        ],
+        [
+          453.0,
+          187.0
+        ],
+        [
+          453.0,
+          195.0
+        ],
+        [
+          465.0,
+          197.0
+        ],
+        [
+          457.0,
+          189.0
+        ],
+        [
+          457.0,
+          193.0
+        ],
+        [
+          461.0,
+          189.0
+        ],
+        [
+          471.0,
+          203.0
+        ],
+        [
+          471.0,
+          179.0
+        ],
+        [
+          447.0,
+          203.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          458.7671232876712,
+          190.986301369863
+        ]
+      ]
+    },
+    {
+      "frame": 32,
+      "label": "hidden",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          453.0,
+          189.0
+        ],
+        [
+          457.0,
+          187.0
+        ],
+        [
+          463.0,
+          193.0
+        ],
+        [
+          461.0,
+          191.0
+        ],
+        [
+          459.0,
+          183.0
+        ],
+        [
+          447.0,
+          177.0
+        ],
+        [
+          449.0,
+          179.0
+        ],
+        [
+          451.0,
+          181.0
+        ],
+        [
+          459.0,
+          189.0
+        ],
+        [
+          467.0,
+          175.0
+        ],
+        [
+          449.0,
+          193.0
+        ],
+        [
+          457.0,
+          193.0
+        ],
+        [
+          467.0,
+          183.0
+        ],
+        [
+          461.0,
+          197.0
+        ],
+        [
+          463.0,
+          185.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          461.09090909090907,
+          183.27272727272728
+        ],
+        [
+          454.0,
+          184.0
+        ],
+        [
+          454.8888888888889,
+          192.0
+        ]
+      ]
+    },
+    {
+      "frame": 33,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          457.0,
+          187.0
+        ],
+        [
+          457.0,
+          191.0
+        ],
+        [
+          461.0,
+          187.0
+        ],
+        [
+          455.0,
+          181.0
+        ],
+        [
+          451.0,
+          193.0
+        ],
+        [
+          459.0,
+          189.0
+        ],
+        [
+          453.0,
+          189.0
+        ],
+        [
+          455.0,
+          185.0
+        ],
+        [
+          463.0,
+          181.0
+        ],
+        [
+          451.0,
+          185.0
+        ],
+        [
+          469.0,
+          199.0
+        ],
+        [
+          451.0,
+          181.0
+        ],
+        [
+          453.0,
+          183.0
+        ],
+        [
+          445.0,
+          175.0
+        ],
+        [
+          467.0,
+          173.0
+        ],
+        [
+          443.0,
+          197.0
+        ],
+        [
+          465.0,
+          203.0
+        ],
+        [
+          473.0,
+          195.0
+        ],
+        [
+          463.0,
+          199.0
+        ],
+        [
+          469.0,
+          193.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          457.6,
+          187.5142857142857
+        ]
+      ],
+      "recorded_error_px": 37.57658845611187,
+      "closest_circle_error_px": 20.8806130178211,
+      "component_selected_error_px": 37.907352148874466
+    },
+    {
+      "frame": 34,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          449.0,
+          185.0
+        ],
+        [
+          463.0,
+          185.0
+        ],
+        [
+          461.0,
+          183.0
+        ],
+        [
+          449.0,
+          171.0
+        ],
+        [
+          463.0,
+          171.0
+        ],
+        [
+          467.0,
+          189.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          456.0,
+          178.0
+        ],
+        [
+          457.3333333333333,
+          191.33333333333334
+        ]
+      ],
+      "recorded_error_px": 33.60059523282288,
+      "closest_circle_error_px": 33.60059523282288,
+      "component_selected_error_px": 37.88432686774599
+    },
+    {
+      "frame": 35,
+      "label": "visible",
+      "cause": "no_hough_candidate",
+      "circles": [],
+      "component_candidates": [],
+      "recorded_error_px": null,
+      "closest_circle_error_px": null
+    },
+    {
+      "frame": 36,
+      "label": "hidden",
+      "cause": "no_hough_candidate",
+      "circles": [],
+      "component_candidates": []
+    },
+    {
+      "frame": 37,
+      "label": "visible",
+      "cause": "no_hough_candidate",
+      "circles": [],
+      "component_candidates": [],
+      "recorded_error_px": null,
+      "closest_circle_error_px": null
+    },
+    {
+      "frame": 38,
+      "label": "visible",
+      "cause": "candidate_selected",
+      "circles": [
+        [
+          447.0,
+          173.0
+        ],
+        [
+          447.0,
+          187.0
+        ],
+        [
+          461.0,
+          173.0
+        ],
+        [
+          461.0,
+          187.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          454.0,
+          180.0
+        ]
+      ],
+      "recorded_error_px": 17.08800749063506,
+      "closest_circle_error_px": 6.324555320336759,
+      "component_selected_error_px": 9.055385138137417
+    },
+    {
+      "frame": 39,
+      "label": "visible",
+      "cause": "no_hough_candidate",
+      "circles": [],
+      "component_candidates": [],
+      "recorded_error_px": null,
+      "closest_circle_error_px": null
+    },
+    {
+      "frame": 75,
+      "label": "visible",
+      "cause": "distance_gate_rejected_all",
+      "circles": [
+        [
+          1097.0,
+          279.0
+        ],
+        [
+          1099.0,
+          281.0
+        ],
+        [
+          1109.0,
+          285.0
+        ],
+        [
+          1101.0,
+          285.0
+        ],
+        [
+          1103.0,
+          291.0
+        ],
+        [
+          1101.0,
+          279.0
+        ],
+        [
+          1107.0,
+          283.0
+        ],
+        [
+          1095.0,
+          271.0
+        ]
+      ],
+      "component_candidates": [
+        [
+          1102.0,
+          278.0
+        ],
+        [
+          1099.5,
+          285.5
+        ]
+      ],
+      "recorded_error_px": null,
+      "closest_circle_error_px": 9.486832980505138,
+      "component_selected_error_px": 16.492422502470642
+    },
+    {
+      "frame": 76,
+      "label": "visible",
+      "cause": "no_hough_candidate",
+      "circles": [],
+      "component_candidates": [
+        [
+          1022.0,
+          245.0
+        ]
+      ],
+      "recorded_error_px": null,
+      "closest_circle_error_px": null,
+      "component_selected_error_px": 4.0
+    }
+  ]
+}

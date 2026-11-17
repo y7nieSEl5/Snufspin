@@ -1,0 +1,36 @@
+{
+  "seed": 20261117,
+  "selection": "four frames sampled uniformly without replacement per clip, excluding previously reviewed frames",
+  "clips": [
+    {
+      "clip": "grass",
+      "video_sha256": "972bc29f6c0ff7c4399e8e42d78f6f9f3ba20194f0c0a76270953d97f5116390",
+      "frames": [
+        6,
+        52,
+        66,
+        74
+      ]
+    },
+    {
+      "clip": "hardcourt",
+      "video_sha256": "310f4084f667c78dc50a5bdca3f21cc99af2a1a7988bfa81af2155e219b90805",
+      "frames": [
+        33,
+        45,
+        50,
+        51
+      ]
+    },
+    {
+      "clip": "clay",
+      "video_sha256": "23002e1dc48b61c1c971054638cabc26b680aa39fabf864d385b642241187dc6",
+      "frames": [
+        3,
+        9,
+        59,
+        73
+      ]
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import copy
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -64,3 +65,21 @@ class EvaluationTests(unittest.TestCase):
         review = self.review | {"corrections": self.review["corrections"][2:]}
         result = evaluate_review(self.video, self.report, review)
         self.assertIsNone(result["mean_error_px_when_position_present"])
+
+    def test_saved_review_benchmarks(self):
+        root = Path(__file__).resolve().parents[1] / "benchmarks" / "tracking"
+        expected = {"grass": (14, 6, 2), "hardcourt": (14, 13, 0), "clay": (13, 11, 0)}
+        for clip, counts in expected.items():
+            with self.subTest(clip=clip):
+                report = json.loads((root / clip / "baseline-track.json").read_text())
+                review = json.loads((root / clip / "review.json").read_text())
+                self.assertEqual(report["video_sha256"], review["video_sha256"])
+                # Exercise the saved coordinates and timing without requiring the media.
+                report["video_sha256"] = self.report["video_sha256"]
+                review["video_sha256"] = self.report["video_sha256"]
+                video = Video(self.video.path, report["width"], report["height"], tuple(report["timestamps_s"]))
+                result = evaluate_review(video, report, review)
+                self.assertEqual((
+                    result["visible_frames"], result["visible_without_position"],
+                    result["hidden_with_position"],
+                ), counts)

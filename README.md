@@ -36,6 +36,20 @@ python -m unittest discover -s tests -v
 
 The report counts missing positions on visible frames, positions on hidden frames, and localization within 5, 10, and 20 source pixels. It includes the provenance and localization error for each reviewed frame. These reviews were selected by watching for errors. They provide regression cases and diagnostic evidence. Whole-clip precision and recall require a representative annotated sample.
 
+## Tracking experiments
+
+The current decision is to improve tracking before using it for 3D reconstruction. The reviewed cases include long gaps and a track that follows the far player's hand. The first post-processing experiment adds short, bracketed interpolations. It improves some reviewed gaps and introduces an incorrect position on a hidden frame in grass. The command is available explicitly for comparing results. [Experiment findings](benchmarks/tracking/README.md)
+
+```sh
+python -m snufspin interpolate-track outputs/tennis-vision-baseline/source.mp4 \
+  --ball-track benchmarks/tracking/grass/baseline-track.json \
+  --max-gap-s 0.15 > outputs/grass-interpolated.json
+python -m snufspin evaluate-track outputs/tennis-vision-baseline/source.mp4 \
+  --ball-track outputs/grass-interpolated.json --review benchmarks/tracking/grass/review.json
+```
+
+Added positions have `interpolated` provenance. The command preserves existing positions, skips unbracketed and longer gaps, and leaves its input untouched. Its gap limit measures the entire time between the endpoint detections.
+
 ## Run the example
 
 This example uses the Python standard library and FFmpeg with `ffprobe` on your `PATH`.

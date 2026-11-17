@@ -6,6 +6,7 @@ from pathlib import Path
 from .evaluation import evaluate_review
 from .overlay import render_overlay
 from .pipeline import MetricPoint, MetricTrack, Shot, ShotLabels, analyze
+from .repair import interpolate_short_gaps
 from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
 from .video import probe_video
@@ -49,10 +50,19 @@ def main() -> None:
     evaluation.add_argument("video", type=Path)
     evaluation.add_argument("--ball-track", type=Path, required=True)
     evaluation.add_argument("--review", type=Path, required=True)
+    repair = commands.add_parser("interpolate-track", help="experimentally fill short bracketed gaps")
+    repair.add_argument("video", type=Path)
+    repair.add_argument("--ball-track", type=Path, required=True)
+    repair.add_argument("--max-gap-s", type=float, default=0.15)
     args = parser.parse_args()
 
     try:
         video = probe_video(args.video)
+        if args.command == "interpolate-track":
+            report = json.loads(args.ball_track.read_text(encoding="utf-8"))
+            result = interpolate_short_gaps(video, report, args.max_gap_s)
+            print(json.dumps(result, indent=2, allow_nan=False))
+            return
         if args.command == "evaluate-track":
             report = json.loads(args.ball_track.read_text(encoding="utf-8"))
             review = json.loads(args.review.read_text(encoding="utf-8"))

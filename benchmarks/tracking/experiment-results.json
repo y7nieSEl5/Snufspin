@@ -1,0 +1,830 @@
+{
+  "grass": {
+    "baseline": {
+      "video_sha256": "972bc29f6c0ff7c4399e8e42d78f6f9f3ba20194f0c0a76270953d97f5116390",
+      "scope": "manually_selected_review_frames",
+      "reviewed_frames": 17,
+      "visible_frames": 14,
+      "hidden_frames": 3,
+      "visible_without_position": 6,
+      "hidden_with_position": 2,
+      "localized_within_px": {
+        "5": 0,
+        "10": 1,
+        "20": 3
+      },
+      "mean_error_px_when_position_present": 25.760905480055907,
+      "frames": [
+        {
+          "frame": 25,
+          "timestamp_s": 0.834167,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 6.0
+        },
+        {
+          "frame": 26,
+          "timestamp_s": 0.867533,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 27,
+          "timestamp_s": 0.9009,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 19.697715603592208
+        },
+        {
+          "frame": 28,
+          "timestamp_s": 0.934267,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 32.64965543462902
+        },
+        {
+          "frame": 29,
+          "timestamp_s": 0.967633,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 27.459060435491963
+        },
+        {
+          "frame": 30,
+          "timestamp_s": 1.001,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 32.01562118716424
+        },
+        {
+          "frame": 31,
+          "timestamp_s": 1.034367,
+          "label": "hidden",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": null
+        },
+        {
+          "frame": 32,
+          "timestamp_s": 1.067733,
+          "label": "hidden",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": null
+        },
+        {
+          "frame": 33,
+          "timestamp_s": 1.1011,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 37.57658845611187
+        },
+        {
+          "frame": 34,
+          "timestamp_s": 1.134467,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 33.60059523282288
+        },
+        {
+          "frame": 35,
+          "timestamp_s": 1.167833,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 36,
+          "timestamp_s": 1.2012,
+          "label": "hidden",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 37,
+          "timestamp_s": 1.234567,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 38,
+          "timestamp_s": 1.267933,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 17.08800749063506
+        },
+        {
+          "frame": 39,
+          "timestamp_s": 1.3013,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 75,
+          "timestamp_s": 2.5025,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 76,
+          "timestamp_s": 2.535867,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        }
+      ]
+    },
+    "short_gap_interpolation": {
+      "video_sha256": "972bc29f6c0ff7c4399e8e42d78f6f9f3ba20194f0c0a76270953d97f5116390",
+      "scope": "manually_selected_review_frames",
+      "reviewed_frames": 17,
+      "visible_frames": 14,
+      "hidden_frames": 3,
+      "visible_without_position": 0,
+      "hidden_with_position": 3,
+      "localized_within_px": {
+        "5": 0,
+        "10": 2,
+        "20": 6
+      },
+      "mean_error_px_when_position_present": 22.847803944026374,
+      "frames": [
+        {
+          "frame": 25,
+          "timestamp_s": 0.834167,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 6.0
+        },
+        {
+          "frame": 26,
+          "timestamp_s": 0.867533,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 12.041476356640295
+        },
+        {
+          "frame": 27,
+          "timestamp_s": 0.9009,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 19.697715603592208
+        },
+        {
+          "frame": 28,
+          "timestamp_s": 0.934267,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 32.64965543462902
+        },
+        {
+          "frame": 29,
+          "timestamp_s": 0.967633,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 27.459060435491963
+        },
+        {
+          "frame": 30,
+          "timestamp_s": 1.001,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 32.01562118716424
+        },
+        {
+          "frame": 31,
+          "timestamp_s": 1.034367,
+          "label": "hidden",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": null
+        },
+        {
+          "frame": 32,
+          "timestamp_s": 1.067733,
+          "label": "hidden",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": null
+        },
+        {
+          "frame": 33,
+          "timestamp_s": 1.1011,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 37.57658845611187
+        },
+        {
+          "frame": 34,
+          "timestamp_s": 1.134467,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 33.60059523282288
+        },
+        {
+          "frame": 35,
+          "timestamp_s": 1.167833,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 27.22588077383516
+        },
+        {
+          "frame": 36,
+          "timestamp_s": 1.2012,
+          "label": "hidden",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": null
+        },
+        {
+          "frame": 37,
+          "timestamp_s": 1.234567,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 16.378381669838056
+        },
+        {
+          "frame": 38,
+          "timestamp_s": 1.267933,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 17.08800749063506
+        },
+        {
+          "frame": 39,
+          "timestamp_s": 1.3013,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 6.70820393249942
+        },
+        {
+          "frame": 75,
+          "timestamp_s": 2.5025,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 29.36661222929242
+        },
+        {
+          "frame": 76,
+          "timestamp_s": 2.535867,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 22.061456413816664
+        }
+      ]
+    }
+  },
+  "hardcourt": {
+    "baseline": {
+      "video_sha256": "310f4084f667c78dc50a5bdca3f21cc99af2a1a7988bfa81af2155e219b90805",
+      "scope": "manually_selected_review_frames",
+      "reviewed_frames": 14,
+      "visible_frames": 14,
+      "hidden_frames": 0,
+      "visible_without_position": 13,
+      "hidden_with_position": 0,
+      "localized_within_px": {
+        "5": 0,
+        "10": 0,
+        "20": 1
+      },
+      "mean_error_px_when_position_present": 12.649110640673518,
+      "frames": [
+        {
+          "frame": 0,
+          "timestamp_s": 0.0,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 1,
+          "timestamp_s": 0.016683,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 21,
+          "timestamp_s": 0.35035,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 23,
+          "timestamp_s": 0.383717,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 24,
+          "timestamp_s": 0.4004,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 25,
+          "timestamp_s": 0.417083,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 44,
+          "timestamp_s": 0.734067,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 12.649110640673518
+        },
+        {
+          "frame": 86,
+          "timestamp_s": 1.434767,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 87,
+          "timestamp_s": 1.45145,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 88,
+          "timestamp_s": 1.468133,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 89,
+          "timestamp_s": 1.484817,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 90,
+          "timestamp_s": 1.5015,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 91,
+          "timestamp_s": 1.518183,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 92,
+          "timestamp_s": 1.534867,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        }
+      ]
+    },
+    "short_gap_interpolation": {
+      "video_sha256": "310f4084f667c78dc50a5bdca3f21cc99af2a1a7988bfa81af2155e219b90805",
+      "scope": "manually_selected_review_frames",
+      "reviewed_frames": 14,
+      "visible_frames": 14,
+      "hidden_frames": 0,
+      "visible_without_position": 2,
+      "hidden_with_position": 0,
+      "localized_within_px": {
+        "5": 11,
+        "10": 11,
+        "20": 12
+      },
+      "mean_error_px_when_position_present": 3.3151413657288824,
+      "frames": [
+        {
+          "frame": 0,
+          "timestamp_s": 0.0,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 1,
+          "timestamp_s": 0.016683,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 21,
+          "timestamp_s": 0.35035,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 2.8284271247461903
+        },
+        {
+          "frame": 23,
+          "timestamp_s": 0.383717,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 1.8028961633130343
+        },
+        {
+          "frame": 24,
+          "timestamp_s": 0.4004,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 3.605551275463989
+        },
+        {
+          "frame": 25,
+          "timestamp_s": 0.417083,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 3.639937619970166
+        },
+        {
+          "frame": 44,
+          "timestamp_s": 0.734067,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 12.649110640673518
+        },
+        {
+          "frame": 86,
+          "timestamp_s": 1.434767,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 1.8026977130546695
+        },
+        {
+          "frame": 87,
+          "timestamp_s": 1.45145,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 1.4142506485485784
+        },
+        {
+          "frame": 88,
+          "timestamp_s": 1.468133,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 1.8027600524898881
+        },
+        {
+          "frame": 89,
+          "timestamp_s": 1.484817,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 2.236041173254174
+        },
+        {
+          "frame": 90,
+          "timestamp_s": 1.5015,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 2.5000202297417347
+        },
+        {
+          "frame": 91,
+          "timestamp_s": 1.518183,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 2.9999925078480483
+        },
+        {
+          "frame": 92,
+          "timestamp_s": 1.534867,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 2.500011239642601
+        }
+      ]
+    }
+  },
+  "clay": {
+    "baseline": {
+      "video_sha256": "23002e1dc48b61c1c971054638cabc26b680aa39fabf864d385b642241187dc6",
+      "scope": "manually_selected_review_frames",
+      "reviewed_frames": 14,
+      "visible_frames": 13,
+      "hidden_frames": 1,
+      "visible_without_position": 11,
+      "hidden_with_position": 0,
+      "localized_within_px": {
+        "5": 0,
+        "10": 0,
+        "20": 2
+      },
+      "mean_error_px_when_position_present": 12.747609312933003,
+      "frames": [
+        {
+          "frame": 0,
+          "timestamp_s": 0.0,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 1,
+          "timestamp_s": 0.04,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 10,
+          "timestamp_s": 0.4,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 11,
+          "timestamp_s": 0.44,
+          "label": "hidden",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 12,
+          "timestamp_s": 0.48000000000000004,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 13,
+          "timestamp_s": 0.52,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 14,
+          "timestamp_s": 0.5599999999999999,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 15,
+          "timestamp_s": 0.6,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 32,
+          "timestamp_s": 1.28,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 13.45362404707371
+        },
+        {
+          "frame": 33,
+          "timestamp_s": 1.32,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 12.041594578792296
+        },
+        {
+          "frame": 43,
+          "timestamp_s": 1.72,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 51,
+          "timestamp_s": 2.04,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 52,
+          "timestamp_s": 2.08,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 53,
+          "timestamp_s": 2.12,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        }
+      ]
+    },
+    "short_gap_interpolation": {
+      "video_sha256": "23002e1dc48b61c1c971054638cabc26b680aa39fabf864d385b642241187dc6",
+      "scope": "manually_selected_review_frames",
+      "reviewed_frames": 14,
+      "visible_frames": 13,
+      "hidden_frames": 1,
+      "visible_without_position": 10,
+      "hidden_with_position": 0,
+      "localized_within_px": {
+        "5": 1,
+        "10": 1,
+        "20": 3
+      },
+      "mean_error_px_when_position_present": 9.243762201121932,
+      "frames": [
+        {
+          "frame": 0,
+          "timestamp_s": 0.0,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 1,
+          "timestamp_s": 0.04,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 10,
+          "timestamp_s": 0.4,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 11,
+          "timestamp_s": 0.44,
+          "label": "hidden",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 12,
+          "timestamp_s": 0.48000000000000004,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 13,
+          "timestamp_s": 0.52,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 14,
+          "timestamp_s": 0.5599999999999999,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 15,
+          "timestamp_s": 0.6,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 32,
+          "timestamp_s": 1.28,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 13.45362404707371
+        },
+        {
+          "frame": 33,
+          "timestamp_s": 1.32,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "measured",
+          "error_px": 12.041594578792296
+        },
+        {
+          "frame": 43,
+          "timestamp_s": 1.72,
+          "label": "visible",
+          "has_position": true,
+          "provenance": "interpolated",
+          "error_px": 2.23606797749979
+        },
+        {
+          "frame": 51,
+          "timestamp_s": 2.04,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 52,
+          "timestamp_s": 2.08,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        },
+        {
+          "frame": 53,
+          "timestamp_s": 2.12,
+          "label": "visible",
+          "has_position": false,
+          "provenance": null,
+          "error_px": null
+        }
+      ]
+    }
+  }
+}
