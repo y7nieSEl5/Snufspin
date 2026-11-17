@@ -1,0 +1,113 @@
+{
+  "status": "awaiting_visual_review",
+  "detector": {
+    "repository": "https://github.com/philippdubach/tennis-vision",
+    "revision": "a501953194f5207534273c7b2b59c0b642df7a05",
+    "tennis_project_revision": "b7552e955253c008c7612298cb40694682a74ef9",
+    "weights_sha256": "c735bc1a1b13a35f179c6492f778ef4ebb9bffd512a96f4d970b32e076653076"
+  },
+  "post_processing": {
+    "method": "short_gap_interpolation",
+    "maximum_endpoint_separation_s": 0.15
+  },
+  "rendering": {
+    "measured": "green",
+    "interpolated": "gold"
+  },
+  "selection": "four-second rally excerpts from three previously unreviewed professional source videos",
+  "clips": [
+    {
+      "name": "hardcourt",
+      "source_url": "https://github.com/VKorpelshoek/GridTrackNet/blob/main/Sample%20Video's/Professional%20Hardcourt.mp4",
+      "source_git_blob": "b22d32c125dcd517ed468e08608f480ed86d2f86",
+      "source_start_s": 1,
+      "source_end_s": 5,
+      "video_sha256": "bdb4ca21c402aa2144bc534e310ec43a668fd3d661dc543653a3b57a81a54e22",
+      "width": 1280,
+      "height": 720,
+      "frame_count": 100,
+      "source_file": "outputs/fresh-tracking-review/hardcourt/source.mp4",
+      "detected_frames": 94,
+      "interpolated_frames": 2,
+      "missing_frames": 4,
+      "longest_remaining_gap_frames": 2,
+      "remaining_gaps": [
+        {
+          "first_frame": 0,
+          "last_frame": 1,
+          "first_timestamp_s": 0.0,
+          "last_timestamp_s": 0.04
+        },
+        {
+          "first_frame": 98,
+          "last_frame": 99,
+          "first_timestamp_s": 3.92,
+          "last_timestamp_s": 3.96
+        }
+      ],
+      "overlay_file": "outputs/fresh-tracking-review/hardcourt/overlay.mp4"
+    },
+    {
+      "name": "grass",
+      "source_url": "https://github.com/VKorpelshoek/GridTrackNet/blob/main/Sample%20Video's/Professional%20Grass.mp4",
+      "source_git_blob": "9484c0c18fe1f2efb67c36189ebb8285ae2314a0",
+      "source_start_s": 2,
+      "source_end_s": 6,
+      "video_sha256": "e415017f578491a1454ea0ab6797ed045d3d5107df7ac99873b754f31ffe96c1",
+      "width": 1280,
+      "height": 720,
+      "frame_count": 100,
+      "source_file": "outputs/fresh-tracking-review/grass/source.mp4",
+      "detected_frames": 82,
+      "interpolated_frames": 6,
+      "missing_frames": 12,
+      "longest_remaining_gap_frames": 10,
+      "remaining_gaps": [
+        {
+          "first_frame": 0,
+          "last_frame": 1,
+          "first_timestamp_s": 0.0,
+          "last_timestamp_s": 0.04
+        },
+        {
+          "first_frame": 71,
+          "last_frame": 80,
+          "first_timestamp_s": 2.84,
+          "last_timestamp_s": 3.2
+        }
+      ],
+      "overlay_file": "outputs/fresh-tracking-review/grass/overlay.mp4"
+    },
+    {
+      "name": "clay",
+      "source_url": "https://github.com/VKorpelshoek/GridTrackNet/blob/main/Sample%20Video's/Professional%20Clay.mp4",
+      "source_git_blob": "e8e9587e17bd4871f8dc8b3d7ca4740f75508757",
+      "source_start_s": 2,
+      "source_end_s": 6,
+      "video_sha256": "1714b3c959b6e1ee045dfe379f39826c6fc981ed6f3652c2aadc12654be0ce12",
+      "width": 1280,
+      "height": 720,
+      "frame_count": 100,
+      "source_file": "outputs/fresh-tracking-review/clay/source.mp4",
+      "detected_frames": 95,
+      "interpolated_frames": 3,
+      "missing_frames": 2,
+      "longest_remaining_gap_frames": 2,
+      "remaining_gaps": [
+        {
+          "first_frame": 0,
+          "last_frame": 1,
+          "first_timestamp_s": 0.0,
+          "last_timestamp_s": 0.04
+        }
+      ],
+      "overlay_file": "outputs/fresh-tracking-review/clay/overlay.mp4"
+    }
+  ],
+  "verification": {
+    "all_frames_decode": true,
+    "source_and_overlay_relative_timestamps_identical": true,
+    "original_detector_positions_preserved": true,
+    "new_positions_marked_interpolated": true
+  }
+}

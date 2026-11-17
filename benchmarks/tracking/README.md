@@ -2,7 +2,9 @@
 
 ## Decision
 
-Improve tracking before relying on its output for monocular 3D reconstruction. The 45 reviewed frames include 41 visible-ball labels and four hidden labels. The baseline has 30 visible-frame misses and positions on two hidden frames. Among the 11 visible labels with a detection, errors range from 6.0 to 37.6 source pixels at 1280×720.
+The current candidate for starting monocular 3D reconstruction is the upstream detector with short-gap interpolation at a maximum endpoint separation of 0.15 seconds. The user accepted this as sufficient for a final visual check on three new clips. If those clips are acceptable, the next development stage is 3D reconstruction. Brief misses during severe blur are acceptable for this review. Persistent wrong tracks and large flight gaps should be reported.
+
+The original 45 reviewed frames include 41 visible-ball labels and four hidden labels. The baseline has 30 visible-frame misses and positions on two hidden frames. Among the 11 visible labels with a detection, errors range from 6.0 to 37.6 source pixels at 1280×720.
 
 These frames were selected because the user observed tracking failures. Their counts describe this failure set. Whole-video accuracy remains unmeasured. Hidden means that the annotator could not locate the ball in the frame. A box on such a frame cannot be verified against a visible ball center.
 
@@ -26,7 +28,7 @@ A second diagnostic extracts connected-component centroids from the same binary 
 
 The centroid probe helps some reviewed frames, including clay 32 and 33 and hardcourt 44. It still follows the hand in much of the grass interval, and most missing frames have no usable component. Its use of baseline history and the selected review set limits conclusions about end-to-end improvement. Per-frame candidate coordinates and errors are in each clip's `candidate-diagnosis.json`.
 
-The next comparison should test image-supported recovery with the same weights, retain raw observations, and keep all inferred points identifiable. All 12 control frames in `control-selection.json` have now been labeled. These were sampled without replacement with a fixed seed and exclude the original review frames.
+Image-supported recovery remains a possible future tracking improvement. All 12 control frames in `control-selection.json` have now been labeled. These were sampled without replacement with a fixed seed and exclude the original review frames.
 
 The four grass control frames all have measured detections. Three are within 5 source pixels of the manual center. Frame 74 differs by 16.49 pixels. Interpolation yields the same errors on this sample because it fills missing positions only. The control sample is small, and the additional localization error supports checking image evidence before trusting nearby detections as gap endpoints. The grass control labels and evaluations are saved in `grass/control-review.json` and `grass/control-results.json`.
 
@@ -35,6 +37,14 @@ The user corrected hardcourt control frame 33 from visible to hidden after ident
 Across all three corrected control samples there are 11 visible labels and one hidden label. The baseline detects all 11 visible balls, with eight positions within 5 source pixels and nine within 10 pixels. Interpolation produces the same visible-frame results and adds an inferred position at hidden frame 33. The `hidden_with_position` count records such positions without assigning them a localization error.
 
 The isolated centroid selection probe also detects all 11 visible control balls, with nine positions within 5 pixels and nine within 10 pixels. Grass frame 74 worsens from 16.49 to 19.38 pixels. Hardcourt frame 33 has neither a Hough-circle nor a connected-component candidate. The remaining visible-frame errors and grass hand-latching cases support testing image-supported recovery. The candidate probe continues to use cached baseline history, so it needs a subsequent full-sequence comparison using its own previous outputs. Each clip's `control-candidate-diagnosis.json` records the rerun and errors.
+
+## Three fresh review clips
+
+`fresh-review/manifest.json` records the candidate settings, source URLs, source-video Git blob hashes, exact excerpt hashes, and inference checkpoint identity. The three new source videos are professional hardcourt, grass, and clay matches from the GridTrackNet sample collection. Four-second rally excerpts were selected by watching the original footage before running the detector. This review tests additional camera views in professional footage. The earlier recreational cases remain part of the baseline record.
+
+Each surface directory under `fresh-review/` stores the raw detector track and the interpolated track for comparison. Local sources and overlays live under `outputs/fresh-tracking-review/`. Green boxes mark detector observations and gold boxes mark interpolated positions. Detection coverage counts positions produced and has no manual accuracy interpretation. Visual acceptance is pending.
+
+All three excerpts have 100 frames at 25 FPS. Hardcourt has 94 detector positions and two interpolated positions, grass has 82 detector positions and six interpolated positions, and clay has 95 detector positions and three interpolated positions. Each clip retains the detector's two startup misses. Hardcourt also ends with two misses. Grass retains a ten-frame gap from frame 71 through 80, at overlay times 2.84–3.20 seconds, for visual review. Every overlay decodes completely and preserves the source's relative frame timestamps.
 
 ## Reproduction
 

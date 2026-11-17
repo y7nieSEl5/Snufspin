@@ -1,0 +1,803 @@
+{
+  "schema_version": 1,
+  "video_sha256": "1714b3c959b6e1ee045dfe379f39826c6fc981ed6f3652c2aadc12654be0ce12",
+  "width": 1280,
+  "height": 720,
+  "frame_count": 100,
+  "timestamps_s": [
+    0.0,
+    0.04,
+    0.08,
+    0.12,
+    0.16,
+    0.2,
+    0.24,
+    0.28,
+    0.32,
+    0.36,
+    0.4,
+    0.44,
+    0.48,
+    0.52,
+    0.56,
+    0.6,
+    0.64,
+    0.68,
+    0.72,
+    0.76,
+    0.8,
+    0.84,
+    0.88,
+    0.92,
+    0.96,
+    1.0,
+    1.04,
+    1.08,
+    1.12,
+    1.16,
+    1.2,
+    1.24,
+    1.28,
+    1.32,
+    1.36,
+    1.4,
+    1.44,
+    1.48,
+    1.52,
+    1.56,
+    1.6,
+    1.64,
+    1.68,
+    1.72,
+    1.76,
+    1.8,
+    1.84,
+    1.88,
+    1.92,
+    1.96,
+    2.0,
+    2.04,
+    2.08,
+    2.12,
+    2.16,
+    2.2,
+    2.24,
+    2.28,
+    2.32,
+    2.36,
+    2.4,
+    2.44,
+    2.48,
+    2.52,
+    2.56,
+    2.6,
+    2.64,
+    2.68,
+    2.72,
+    2.76,
+    2.8,
+    2.84,
+    2.88,
+    2.92,
+    2.96,
+    3.0,
+    3.04,
+    3.08,
+    3.12,
+    3.16,
+    3.2,
+    3.24,
+    3.28,
+    3.32,
+    3.36,
+    3.4,
+    3.44,
+    3.48,
+    3.52,
+    3.56,
+    3.6,
+    3.64,
+    3.68,
+    3.72,
+    3.76,
+    3.8,
+    3.84,
+    3.88,
+    3.92,
+    3.96
+  ],
+  "source": {
+    "engine": "philippdubach/tennis-vision",
+    "artifact_sha256": "4a9684c147ebcf0c23d6ae67d0aee0a4a4c32ebd3cbd9bdc55a7817331b83a15",
+    "experiment": "short_gap_interpolation",
+    "max_gap_s": 0.15
+  },
+  "ball_track": [
+    {
+      "frame": 2,
+      "x_px": 351.0,
+      "y_px": 393.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 3,
+      "x_px": 373.0,
+      "y_px": 371.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 4,
+      "x_px": 395.0,
+      "y_px": 351.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 5,
+      "x_px": 411.0,
+      "y_px": 333.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 6,
+      "x_px": 429.0,
+      "y_px": 319.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 7,
+      "x_px": 447.0,
+      "y_px": 303.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 8,
+      "x_px": 463.0,
+      "y_px": 291.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 9,
+      "x_px": 477.0,
+      "y_px": 281.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 10,
+      "x_px": 489.0,
+      "y_px": 273.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 11,
+      "x_px": 503.0,
+      "y_px": 265.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 12,
+      "x_px": 513.0,
+      "y_px": 261.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 13,
+      "x_px": 523.0,
+      "y_px": 257.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 14,
+      "x_px": 533.0,
+      "y_px": 253.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 15,
+      "x_px": 545.0,
+      "y_px": 249.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 16,
+      "x_px": 553.0,
+      "y_px": 249.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 17,
+      "x_px": 563.0,
+      "y_px": 247.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 18,
+      "x_px": 567.0,
+      "y_px": 249.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 19,
+      "x_px": 579.0,
+      "y_px": 249.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 20,
+      "x_px": 585.0,
+      "y_px": 251.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 21,
+      "x_px": 593.0,
+      "y_px": 251.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 22,
+      "x_px": 599.0,
+      "y_px": 257.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 23,
+      "x_px": 605.0,
+      "y_px": 259.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 24,
+      "x_px": 609.0,
+      "y_px": 263.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 25,
+      "x_px": 617.0,
+      "y_px": 269.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 26,
+      "x_px": 623.0,
+      "y_px": 275.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 27,
+      "x_px": 627.0,
+      "y_px": 265.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 28,
+      "x_px": 631.0,
+      "y_px": 253.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 29,
+      "x_px": 635.0,
+      "y_px": 243.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 30,
+      "x_px": 639.0,
+      "y_px": 233.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 31,
+      "x_px": 643.0,
+      "y_px": 225.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 32,
+      "x_px": 645.0,
+      "y_px": 217.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 33,
+      "x_px": 647.0,
+      "y_px": 211.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 34,
+      "x_px": 651.0,
+      "y_px": 203.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 35,
+      "x_px": 655.0,
+      "y_px": 199.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 36,
+      "x_px": 659.0,
+      "y_px": 195.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 37,
+      "x_px": 661.0,
+      "y_px": 189.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 38,
+      "x_px": 663.0,
+      "y_px": 187.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 39,
+      "x_px": 669.0,
+      "y_px": 189.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 40,
+      "x_px": 667.0,
+      "y_px": 181.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 41,
+      "x_px": 663.0,
+      "y_px": 180.0,
+      "provenance": "interpolated",
+      "confidence": null
+    },
+    {
+      "frame": 42,
+      "x_px": 659.0,
+      "y_px": 179.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 43,
+      "x_px": 653.0,
+      "y_px": 177.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 44,
+      "x_px": 651.0,
+      "y_px": 175.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 45,
+      "x_px": 647.0,
+      "y_px": 173.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 46,
+      "x_px": 641.0,
+      "y_px": 173.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 47,
+      "x_px": 637.0,
+      "y_px": 173.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 48,
+      "x_px": 633.0,
+      "y_px": 173.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 49,
+      "x_px": 629.0,
+      "y_px": 175.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 50,
+      "x_px": 623.0,
+      "y_px": 175.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 51,
+      "x_px": 619.0,
+      "y_px": 179.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 52,
+      "x_px": 615.0,
+      "y_px": 181.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 53,
+      "x_px": 611.0,
+      "y_px": 185.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 54,
+      "x_px": 605.0,
+      "y_px": 187.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 55,
+      "x_px": 599.0,
+      "y_px": 191.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 56,
+      "x_px": 595.0,
+      "y_px": 197.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 57,
+      "x_px": 591.0,
+      "y_px": 203.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 58,
+      "x_px": 589.0,
+      "y_px": 211.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 59,
+      "x_px": 581.0,
+      "y_px": 217.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 60,
+      "x_px": 575.0,
+      "y_px": 225.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 61,
+      "x_px": 571.0,
+      "y_px": 233.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 62,
+      "x_px": 565.0,
+      "y_px": 243.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 63,
+      "x_px": 563.0,
+      "y_px": 253.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 64,
+      "x_px": 557.0,
+      "y_px": 265.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 65,
+      "x_px": 553.0,
+      "y_px": 277.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 66,
+      "x_px": 547.0,
+      "y_px": 289.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 67,
+      "x_px": 543.0,
+      "y_px": 305.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 68,
+      "x_px": 539.0,
+      "y_px": 320.00000000000006,
+      "provenance": "interpolated",
+      "confidence": null
+    },
+    {
+      "frame": 69,
+      "x_px": 535.0,
+      "y_px": 335.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 70,
+      "x_px": 529.0,
+      "y_px": 349.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 71,
+      "x_px": 523.0,
+      "y_px": 367.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 72,
+      "x_px": 521.0,
+      "y_px": 385.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 73,
+      "x_px": 515.0,
+      "y_px": 405.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 74,
+      "x_px": 511.0,
+      "y_px": 417.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 75,
+      "x_px": 511.0,
+      "y_px": 407.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 76,
+      "x_px": 511.0,
+      "y_px": 397.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 77,
+      "x_px": 509.0,
+      "y_px": 391.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 78,
+      "x_px": 507.0,
+      "y_px": 385.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 79,
+      "x_px": 507.0,
+      "y_px": 381.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 80,
+      "x_px": 507.0,
+      "y_px": 377.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 81,
+      "x_px": 507.0,
+      "y_px": 373.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 82,
+      "x_px": 507.0,
+      "y_px": 371.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 83,
+      "x_px": 505.0,
+      "y_px": 369.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 84,
+      "x_px": 503.0,
+      "y_px": 367.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 85,
+      "x_px": 505.0,
+      "y_px": 365.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 86,
+      "x_px": 503.0,
+      "y_px": 367.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 87,
+      "x_px": 501.0,
+      "y_px": 371.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 88,
+      "x_px": 501.0,
+      "y_px": 375.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 89,
+      "x_px": 501.0,
+      "y_px": 379.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 90,
+      "x_px": 501.0,
+      "y_px": 383.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 91,
+      "x_px": 501.0,
+      "y_px": 389.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 92,
+      "x_px": 501.0,
+      "y_px": 395.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 93,
+      "x_px": 501.0,
+      "y_px": 403.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 94,
+      "x_px": 501.0,
+      "y_px": 393.00000000000006,
+      "provenance": "interpolated",
+      "confidence": null
+    },
+    {
+      "frame": 95,
+      "x_px": 501.0,
+      "y_px": 383.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 96,
+      "x_px": 501.0,
+      "y_px": 369.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 97,
+      "x_px": 501.0,
+      "y_px": 351.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 98,
+      "x_px": 501.0,
+      "y_px": 335.0,
+      "provenance": "measured",
+      "confidence": null
+    },
+    {
+      "frame": 99,
+      "x_px": 501.0,
+      "y_px": 327.0,
+      "provenance": "measured",
+      "confidence": null
+    }
+  ]
+}
