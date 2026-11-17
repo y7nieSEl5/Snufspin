@@ -1,27 +1,47 @@
 # Snufspin
 
-Snufspin is an offline tennis shot analysis framework. The first tracking backend is tennis-vision. Snufspin imports its 2D ball detections and renders an overlay for review. The shot analysis command also accepts manual observations, with optional shot labels and metric trajectories.
+Snufspin is an offline tennis shot analysis framework. Its Python ball tracker follows the reviewed tennis-vision baseline, with short-gap interpolation and overlays for review. The shot analysis command also accepts manual observations, with optional shot labels and metric trajectories.
 
-## Run the tennis-vision baseline
+## Set up the local tracker
 
-Start with a short, upright, fixed-camera MP4. Use a clip with the orientation baked into the pixels so the detector and overlay see the same image coordinates.
-
-1. Open the Phase 1 notebook in Colab and choose a GPU runtime. In the **Upload input video** section, set `input_video` to your clip’s path on Drive or use the browser upload option. Run the notebook and download its `upstream.npz`. [tennis-vision Phase 1 notebook](https://colab.research.google.com/github/philippdubach/tennis-vision/blob/a501953194f5207534273c7b2b59c0b642df7a05/scripts/colab_run.ipynb)
-2. Put the artifact and the exact MP4 processed by the notebook under `data/`. From the Snufspin repository root, run the importer and renderer locally with Python 3.10+ and FFmpeg (`ffprobe` and `libx264` included).
+Use Python 3.10+ and FFmpeg with `ffprobe` and `libx264` on your `PATH`. Install the runtime dependencies and obtain the pinned external model architecture and pretrained ball checkpoint once.
 
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install numpy
+python -m pip install -r requirements.txt gdown
+mkdir -p data/tracknet
+git clone https://github.com/yastrebksv/TennisProject.git data/TennisProject
+git -C data/TennisProject checkout b7552e955253c008c7612298cb40694682a74ef9
+gdown 1XEYZ4myUN7QT-NeBYJI0xteLsvs-ZAOl -O data/tracknet/model_best.pt
+```
+
+The runtime loads `BallTrackerNet` from that checkout and records hashes of the model file and checkpoint. The detector implementation in `snufspin/tracknet.py` preserves the reviewed baseline's three-frame BGR input, coordinate scaling, mask conversion, and distance gate. The ball model and checkpoint are credited to yastrebksv's TrackNet and TennisProject work. [Model and checkpoint source](https://github.com/yastrebksv/TrackNet#pretrained-model)
+
+## Track, interpolate, and render
+
+Start with a short, upright MP4. Use a clip with orientation baked into the pixels so the detector and overlay see the same image coordinates.
+
+```sh
 mkdir -p outputs
-python -m snufspin import-tennis-vision data/clip.mp4 data/upstream.npz > outputs/ball-track.json
+python -m snufspin track data/clip.mp4 \
+  --model-source data/TennisProject/tracknet.py \
+  --weights data/tracknet/model_best.pt > outputs/raw-track.json
+python -m snufspin interpolate-track data/clip.mp4 \
+  --ball-track outputs/raw-track.json --max-gap-s 0.15 > outputs/ball-track.json
 python -m snufspin render data/clip.mp4 --ball-track outputs/ball-track.json \
   --output outputs/overlay.mp4
 ```
 
-`ball-track.json` records frame timestamps from the original video, detections in source pixels, and SHA-256 hashes for the video and artifact. The green box appears on frames with a detection. Missed frames stay empty, following CourtVision’s distinction between observations and filled gaps. Snufspin reads the numeric ball track and clip identity from `upstream.npz` with pickle disabled. Keep the upstream artifact if you need its court, player, or bounce outputs later.
+Tracking runs on CPU with four threads by default. Use `--device cuda` or `--device mps` with a supported PyTorch installation, and `--threads` to set the CPU thread count. The tracker streams decoded frames with a three-frame input window. The reviewed baseline's first two frames have no detection. Short gaps between detections can be filled by the interpolation step.
+
+Track files record original frame timestamps, source-pixel positions, provenance, and the source video's SHA-256 hash. Green boxes show detector observations and gold boxes show interpolated positions, following CourtVision's distinction between measured and inferred tracks.
 
 The same cached track can be passed to `analyze --ball-track outputs/ball-track.json` alongside a shot observation file when you begin annotating flight windows.
+
+## Import existing tennis-vision results
+
+For an existing `upstream.npz`, run `python -m snufspin import-tennis-vision data/clip.mp4 data/upstream.npz > outputs/raw-track.json`, then use the interpolation and rendering commands above. The importer reads numeric ball tracks and clip identity with pickle disabled.
 
 ## Evaluate reviewed tracking errors
 
@@ -38,7 +58,7 @@ The report counts missing positions on visible frames, positions on hidden frame
 
 ## Tracking experiments
 
-The current decision is to improve tracking before using it for 3D reconstruction. The reviewed cases include long gaps and a track that follows the far player's hand. The first post-processing experiment adds short, bracketed interpolations. It improves some reviewed gaps and adds an inferred position on a hidden frame in grass. Hidden frames provide no visible center for assessing localization error. The command is available explicitly for comparing results. [Experiment findings](benchmarks/tracking/README.md)
+The current candidate uses the upstream detector plus short, bracketed interpolations. A visual check on three fresh clips will determine whether to pin it for 3D reconstruction. Hidden frames provide no visible center for assessing localization error. [Experiment findings](benchmarks/tracking/README.md)
 
 ```sh
 python -m snufspin interpolate-track outputs/tennis-vision-baseline/source.mp4 \
@@ -85,3 +105,7 @@ Average speed is the summed 3D sample-to-sample distance divided by elapsed vide
 ## Add models
 
 [`analyze`](snufspin/pipeline.py) accepts independent `classify` and `reconstruct` callables. Both receive the shot window, video path and timestamps, and that shot's 2D ball observations. The classifier returns `ShotLabels`, and the reconstructor returns a `MetricTrack`. Either can return `None` when the observations are insufficient. A ball tracker or contact detector can start by writing the sidecar format, so you can reuse its output while iterating on stroke recognition or reconstruction.
+
+## Credits
+
+Snufspin builds on Philipp Dubach's tennis-vision pipeline, yastrebksv's TennisProject and TrackNet model, and tracking design ideas from kzheng18's CourtVision. GridTrackNet's sample collection supplied the footage used for our tracking reviews. [Project credits and upstream notices](CREDITS.md)

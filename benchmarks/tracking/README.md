@@ -50,9 +50,11 @@ All three excerpts have 100 frames at 25 FPS. Hardcourt has 94 detector position
 
 `baseline-track.json` contains the frozen upstream predictions and metadata. `review.json` contains the user's labels. `experiment-results.json` records the baseline and interpolation evaluation results. Videos remain local under `outputs/tennis-vision-baseline`, `outputs/tennis-vision-hardcourt-review`, and `outputs/tennis-vision-clay-review`.
 
-The baseline used tennis-vision revision `a501953194f5207534273c7b2b59c0b642df7a05` and its pinned TennisProject revision `b7552e955253c008c7612298cb40694682a74ef9`. Each candidate diagnostic records SHA-256 hashes of the model source and checkpoint. The checkpoint is the ball model linked by the upstream notebook. [Upstream notebook](https://github.com/philippdubach/tennis-vision/blob/a501953194f5207534273c7b2b59c0b642df7a05/scripts/colab_run.ipynb)
+The baseline used tennis-vision revision `a501953194f5207534273c7b2b59c0b642df7a05` and its pinned TennisProject revision `b7552e955253c008c7612298cb40694682a74ef9`. Each candidate diagnostic records SHA-256 hashes of the model source and checkpoint. The checkpoint is the ball model linked by yastrebksv/TrackNet. Snufspin's local `track` command reproduces the reviewed detector from Python. [Model and checkpoint source](https://github.com/yastrebksv/TrackNet#pretrained-model)
 
-With NumPy, PyTorch, and OpenCV available, run the candidate diagnostic using the local TennisProject `tracknet.py` and checkpoint downloaded by the notebook.
+The local Python runner was checked on the full 100-frame fresh hardcourt excerpt. Every raw detector position matched the frozen baseline exactly (94 positions), and every position after interpolation matched the frozen candidate (96 positions). The overlay preserved all 100 source frame timestamps. CPU inference was used for this comparison. It uses OpenCV decoding to reproduce the reviewed detector's input pixels.
+
+With NumPy, PyTorch, and OpenCV available, run the candidate diagnostic using the local TennisProject `tracknet.py` and pretrained checkpoint from the local setup instructions.
 
 ```sh
 python -m snufspin.diagnostics outputs/tennis-vision-baseline/source.mp4 \
