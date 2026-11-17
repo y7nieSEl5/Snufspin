@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .overlay import render_overlay
 from .pipeline import MetricPoint, MetricTrack, Shot, ShotLabels, analyze
+from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
 from .video import probe_video
 
@@ -40,10 +41,16 @@ def main() -> None:
     overlay.add_argument("video", type=Path)
     overlay.add_argument("--ball-track", type=Path, required=True)
     overlay.add_argument("--output", type=Path, required=True)
+    upstream = commands.add_parser("import-tennis-vision", help="convert a tennis-vision upstream.npz ball track")
+    upstream.add_argument("video", type=Path)
+    upstream.add_argument("artifact", type=Path)
     args = parser.parse_args()
 
     try:
         video = probe_video(args.video)
+        if args.command == "import-tennis-vision":
+            print(json.dumps(import_ball_track(video, args.artifact), indent=2, allow_nan=False))
+            return
         if args.command == "render":
             report = json.loads(args.ball_track.read_text(encoding="utf-8"))
             render_overlay(video, read_ball_track(video, report), args.output)
