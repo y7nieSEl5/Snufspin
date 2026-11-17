@@ -2,7 +2,7 @@
 
 ## Decision
 
-The current candidate for starting monocular 3D reconstruction is the upstream detector with short-gap interpolation at a maximum endpoint separation of 0.15 seconds. The user accepted this as sufficient for a final visual check on three new clips. If those clips are acceptable, the next development stage is 3D reconstruction. Brief misses during severe blur are acceptable for this review. Persistent wrong tracks and large flight gaps should be reported.
+The user accepted the three fresh demos as sufficient for starting monocular 3D reconstruction. The pinned baseline, `tracking-baseline-v1`, uses the upstream detector with short-gap interpolation at a maximum endpoint separation of 0.15 seconds. One isolated hardcourt misidentification near a player's body was reported and accepted as a known limitation. Its frame number has not been identified. The next development stage is 3D reconstruction, including robust treatment of isolated bad observations.
 
 The original 45 reviewed frames include 41 visible-ball labels and four hidden labels. The baseline has 30 visible-frame misses and positions on two hidden frames. Among the 11 visible labels with a detection, errors range from 6.0 to 37.6 source pixels at 1280×720.
 
@@ -42,7 +42,7 @@ The isolated centroid selection probe also detects all 11 visible control balls,
 
 `fresh-review/manifest.json` records the candidate settings, source URLs, source-video Git blob hashes, exact excerpt hashes, and inference checkpoint identity. The three new source videos are professional hardcourt, grass, and clay matches from the GridTrackNet sample collection. Four-second rally excerpts were selected by watching the original footage before running the detector. This review tests additional camera views in professional footage. The earlier recreational cases remain part of the baseline record.
 
-Each surface directory under `fresh-review/` stores the raw detector track and the interpolated track for comparison. Local sources and overlays live under `outputs/fresh-tracking-review/`. Green boxes mark detector observations and gold boxes mark interpolated positions. Detection coverage counts positions produced and has no manual accuracy interpretation. Visual acceptance is pending.
+Each surface directory under `fresh-review/` stores the raw detector track and the interpolated track for comparison. Local sources and overlays live under `outputs/fresh-tracking-review/`. Green boxes mark detector observations and gold boxes mark interpolated positions. Detection coverage counts positions produced and has no manual accuracy interpretation. All three demos were visually accepted on November 17, 2026.
 
 All three excerpts have 100 frames at 25 FPS. Hardcourt has 94 detector positions and two interpolated positions, grass has 82 detector positions and six interpolated positions, and clay has 95 detector positions and three interpolated positions. Each clip retains the detector's two startup misses. Hardcourt also ends with two misses. Grass retains a ten-frame gap from frame 71 through 80, at overlay times 2.84–3.20 seconds, for visual review. Every overlay decodes completely and preserves the source's relative frame timestamps.
 

@@ -58,7 +58,7 @@ The report counts missing positions on visible frames, positions on hidden frame
 
 ## Tracking experiments
 
-The current candidate uses the upstream detector plus short, bracketed interpolations. A visual check on three fresh clips will determine whether to pin it for 3D reconstruction. Hidden frames provide no visible center for assessing localization error. [Experiment findings](benchmarks/tracking/README.md)
+The tracking baseline is pinned as `tracking-baseline-v1` after visual acceptance of three fresh clips. It uses the upstream detector plus short, bracketed interpolations. The next development stage is 3D reconstruction. Hidden frames provide no visible center for assessing localization error. [Experiment findings](benchmarks/tracking/README.md)
 
 ```sh
 python -m snufspin interpolate-track outputs/tennis-vision-baseline/source.mp4 \

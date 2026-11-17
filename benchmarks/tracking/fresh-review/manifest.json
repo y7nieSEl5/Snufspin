@@ -1,5 +1,5 @@
 {
-  "status": "awaiting_visual_review",
+  "status": "accepted_for_3d_baseline",
   "detector": {
     "repository": "https://github.com/philippdubach/tennis-vision",
     "revision": "a501953194f5207534273c7b2b59c0b642df7a05",
@@ -109,5 +109,17 @@
     "source_and_overlay_relative_timestamps_identical": true,
     "original_detector_positions_preserved": true,
     "new_positions_marked_interpolated": true
+  },
+  "baseline_tag": "tracking-baseline-v1",
+  "visual_review": {
+    "accepted_on": "2026-11-17",
+    "reviewer": "user",
+    "accepted_clips": [
+      "hardcourt",
+      "grass",
+      "clay"
+    ],
+    "known_issue": "One isolated hardcourt misidentification near the player body.",
+    "known_issue_frame": null
   }
 }
