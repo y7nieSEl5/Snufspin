@@ -1,0 +1,118 @@
+{
+  "video_sha256": "972bc29f6c0ff7c4399e8e42d78f6f9f3ba20194f0c0a76270953d97f5116390",
+  "corrections": [
+    {
+      "frame": 25,
+      "timestamp_s": 0.834167,
+      "status": "visible",
+      "x_px": 439,
+      "y_px": 209
+    },
+    {
+      "frame": 26,
+      "timestamp_s": 0.867533,
+      "status": "visible",
+      "x_px": 437,
+      "y_px": 207
+    },
+    {
+      "frame": 27,
+      "timestamp_s": 0.9009,
+      "status": "visible",
+      "x_px": 435,
+      "y_px": 203
+    },
+    {
+      "frame": 28,
+      "timestamp_s": 0.934267,
+      "status": "visible",
+      "x_px": 432,
+      "y_px": 202
+    },
+    {
+      "frame": 29,
+      "timestamp_s": 0.967633,
+      "status": "visible",
+      "x_px": 430,
+      "y_px": 202
+    },
+    {
+      "frame": 30,
+      "timestamp_s": 1.001,
+      "status": "visible",
+      "x_px": 428,
+      "y_px": 201
+    },
+    {
+      "frame": 31,
+      "timestamp_s": 1.034367,
+      "status": "hidden"
+    },
+    {
+      "frame": 32,
+      "timestamp_s": 1.067733,
+      "status": "hidden"
+    },
+    {
+      "frame": 33,
+      "timestamp_s": 1.1011,
+      "status": "visible",
+      "x_px": 423,
+      "y_px": 203
+    },
+    {
+      "frame": 34,
+      "timestamp_s": 1.134467,
+      "status": "visible",
+      "x_px": 422,
+      "y_px": 205
+    },
+    {
+      "frame": 35,
+      "timestamp_s": 1.167833,
+      "status": "visible",
+      "x_px": 429,
+      "y_px": 201
+    },
+    {
+      "frame": 36,
+      "timestamp_s": 1.2012,
+      "status": "hidden"
+    },
+    {
+      "frame": 37,
+      "timestamp_s": 1.234567,
+      "status": "visible",
+      "x_px": 444,
+      "y_px": 192
+    },
+    {
+      "frame": 38,
+      "timestamp_s": 1.267933,
+      "status": "visible",
+      "x_px": 453,
+      "y_px": 189
+    },
+    {
+      "frame": 39,
+      "timestamp_s": 1.3013,
+      "status": "visible",
+      "x_px": 462,
+      "y_px": 185
+    },
+    {
+      "frame": 75,
+      "timestamp_s": 2.5025,
+      "status": "visible",
+      "x_px": 1086,
+      "y_px": 274
+    },
+    {
+      "frame": 76,
+      "timestamp_s": 2.535867,
+      "status": "visible",
+      "x_px": 1022,
+      "y_px": 241
+    }
+  ]
+}

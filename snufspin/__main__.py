@@ -3,6 +3,7 @@ import json
 import subprocess
 from pathlib import Path
 
+from .evaluation import evaluate_review
 from .overlay import render_overlay
 from .pipeline import MetricPoint, MetricTrack, Shot, ShotLabels, analyze
 from .tennis_vision import import_ball_track
@@ -44,10 +45,19 @@ def main() -> None:
     upstream = commands.add_parser("import-tennis-vision", help="convert a tennis-vision upstream.npz ball track")
     upstream.add_argument("video", type=Path)
     upstream.add_argument("artifact", type=Path)
+    evaluation = commands.add_parser("evaluate-track", help="evaluate ball positions on reviewed frames")
+    evaluation.add_argument("video", type=Path)
+    evaluation.add_argument("--ball-track", type=Path, required=True)
+    evaluation.add_argument("--review", type=Path, required=True)
     args = parser.parse_args()
 
     try:
         video = probe_video(args.video)
+        if args.command == "evaluate-track":
+            report = json.loads(args.ball_track.read_text(encoding="utf-8"))
+            review = json.loads(args.review.read_text(encoding="utf-8"))
+            print(json.dumps(evaluate_review(video, report, review), indent=2, allow_nan=False))
+            return
         if args.command == "import-tennis-vision":
             print(json.dumps(import_ball_track(video, args.artifact), indent=2, allow_nan=False))
             return

@@ -23,6 +23,19 @@ python -m snufspin render data/clip.mp4 --ball-track outputs/ball-track.json \
 
 The same cached track can be passed to `analyze --ball-track outputs/ball-track.json` alongside a shot observation file when you begin annotating flight windows.
 
+## Evaluate reviewed tracking errors
+
+Manual review sets and the original cached predictions live under `benchmarks/tracking/`. The video hash binds each review to its source clip. Use the exact local source MP4 for the evaluation command.
+
+```sh
+python -m snufspin evaluate-track outputs/tennis-vision-baseline/source.mp4 \
+  --ball-track benchmarks/tracking/grass/baseline-track.json \
+  --review benchmarks/tracking/grass/review.json
+python -m unittest discover -s tests -v
+```
+
+The report counts missing positions on visible frames, positions on hidden frames, and localization within 5, 10, and 20 source pixels. It includes the provenance and localization error for each reviewed frame. These reviews were selected by watching for errors. They provide regression cases and diagnostic evidence. Whole-clip precision and recall require a representative annotated sample.
+
 ## Run the example
 
 This example uses the Python standard library and FFmpeg with `ffprobe` on your `PATH`.
