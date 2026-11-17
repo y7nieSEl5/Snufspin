@@ -26,7 +26,9 @@ A second diagnostic extracts connected-component centroids from the same binary 
 
 The centroid probe helps some reviewed frames, including clay 32 and 33 and hardcourt 44. It still follows the hand in much of the grass interval, and most missing frames have no usable component. Its use of baseline history and the selected review set limits conclusions about end-to-end improvement. Per-frame candidate coordinates and errors are in each clip's `candidate-diagnosis.json`.
 
-The next comparison should test image-supported recovery with the same weights, retain raw observations, and keep all inferred points identifiable. Before adopting changed candidate selection, label the 12 previously unreviewed control frames in `control-selection.json`. These were sampled without replacement with a fixed seed and exclude the original review frames. The control labels remain pending.
+The next comparison should test image-supported recovery with the same weights, retain raw observations, and keep all inferred points identifiable. Before adopting changed candidate selection, label the 12 previously unreviewed control frames in `control-selection.json`. These were sampled without replacement with a fixed seed and exclude the original review frames. Grass controls have been labeled. The eight hardcourt and clay control labels remain pending.
+
+The four grass control frames all have measured detections. Three are within 5 source pixels of the manual center. Frame 74 differs by 16.49 pixels. Interpolation yields the same errors on this sample because it fills missing positions only. The control sample is small, and the additional localization error supports checking image evidence before trusting nearby detections as gap endpoints. The grass control labels and evaluations are saved in `grass/control-review.json` and `grass/control-results.json`.
 
 ## Reproduction
 
