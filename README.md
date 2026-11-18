@@ -39,6 +39,31 @@ Track files record original frame timestamps, source-pixel positions, provenance
 
 The same cached track can be passed to `analyze --ball-track outputs/ball-track.json` alongside a shot observation file when you begin annotating flight windows.
 
+## Set up the official WASB Tennis tracker
+
+```sh
+python -m pip install -r requirements-wasb.txt
+mkdir -p data/wasb
+git clone https://github.com/nttcom/WASB-SBDT.git data/wasb/WASB-SBDT
+git -C data/wasb/WASB-SBDT checkout --detach 923462cacdeb3353b84ddebdedb3f4b7a8553b0f
+curl -fL 'https://drive.usercontent.google.com/download?id=14AeyIOCQ2UaQmbZLNQJa1H_eSwxUXk7z&export=download&confirm=t' \
+  -o data/wasb/wasb_tennis_best.pth.tar
+shasum -a 256 data/wasb/wasb_tennis_best.pth.tar
+```
+
+The expected SHA-256 is `9d391239ab10c733f8e5bfadf16ab72838e7a8ebc88e8ae2038501c03d42b4bb`. [WASB model zoo](https://github.com/nttcom/WASB-SBDT/blob/923462cacdeb3353b84ddebdedb3f4b7a8553b0f/MODEL_ZOO.md)
+
+```sh
+mkdir -p outputs
+python -m snufspin track-wasb data/clip.mp4 \
+  --upstream data/wasb/WASB-SBDT \
+  --weights data/wasb/wasb_tennis_best.pth.tar > outputs/wasb-track.json
+```
+
+The adapter uses WASB's RGB affine warp and ImageNet normalization, with 512×288 inputs and heatmaps. It runs overlapping three-frame windows at stride 1. For each original frame, it sends the combined candidates to WASB's online tracker, using the official 0.5 heatmap threshold, weighted connected components, and 300-source-pixel displacement gate. The adapter defaults to CPU with four threads and one window per forward pass. [Official stride-1 Tennis configuration](https://github.com/nttcom/WASB-SBDT/blob/923462cacdeb3353b84ddebdedb3f4b7a8553b0f/GET_STARTED.md#wasb-ours-step1), [WASB inference method](https://arxiv.org/html/2311.05237#S3.SS3)
+
+The output uses Snufspin's track JSON, with source-video SHA-256 and timestamps for every frame. Selected in-bounds detections use the inverse affine transform and carry `measured` provenance. Frames without a selected in-bounds detection have no point in `ball_track`. Clips shorter than three frames have no complete window.
+
 ## Import existing tennis-vision results
 
 For an existing `upstream.npz`, run `python -m snufspin import-tennis-vision data/clip.mp4 data/upstream.npz > outputs/raw-track.json`, then use the interpolation and rendering commands above. The importer reads numeric ball tracks and clip identity with pickle disabled.

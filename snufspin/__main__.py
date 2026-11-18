@@ -10,6 +10,7 @@ from .repair import interpolate_short_gaps
 from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
 from .tracknet import run_tracknet
+from .wasb import run_wasb
 from .video import probe_video
 
 
@@ -61,12 +62,22 @@ def main() -> None:
     tracking.add_argument("--weights", type=Path, required=True)
     tracking.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     tracking.add_argument("--threads", type=int, default=4)
+    wasb = commands.add_parser("track-wasb", help="run the official WASB Tennis checkpoint at stride 1")
+    wasb.add_argument("video", type=Path)
+    wasb.add_argument("--upstream", type=Path, required=True)
+    wasb.add_argument("--weights", type=Path, required=True)
+    wasb.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
+    wasb.add_argument("--threads", type=int, default=4)
     args = parser.parse_args()
 
     try:
         video = probe_video(args.video)
         if args.command == "track":
             report = run_tracknet(video, args.model_source, args.weights, args.device, args.threads)
+            print(json.dumps(report, indent=2, allow_nan=False))
+            return
+        if args.command == "track-wasb":
+            report = run_wasb(video, args.upstream, args.weights, args.device, args.threads)
             print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command == "interpolate-track":
