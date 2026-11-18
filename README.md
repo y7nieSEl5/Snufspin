@@ -64,6 +64,8 @@ The adapter uses WASB's RGB affine warp and ImageNet normalization, with 512×28
 
 The output uses Snufspin's track JSON, with source-video SHA-256 and timestamps for every frame. Selected in-bounds detections use the inverse affine transform and carry `measured` provenance. Frames without a selected in-bounds detection have no point in `ball_track`. Clips shorter than three frames have no complete window.
 
+Use `--stride 3` to run the upstream disjoint-window setting. If the clip ends with one or two frames outside a complete window, they retain their timestamps and have no detection.
+
 ## Import existing tennis-vision results
 
 For an existing `upstream.npz`, run `python -m snufspin import-tennis-vision data/clip.mp4 data/upstream.npz > outputs/raw-track.json`, then use the interpolation and rendering commands above. The importer reads numeric ball tracks and clip identity with pickle disabled.

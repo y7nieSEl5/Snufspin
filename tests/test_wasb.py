@@ -31,3 +31,18 @@ class WasbWindowTest(unittest.TestCase):
 
         frames = list(_selected_frames(range(2), 3, detect, CandidateRecorder()))
         self.assertEqual(frames, [(0, []), (1, [])])
+
+    def test_stride_three_uses_disjoint_windows_and_preserves_uncovered_tail(self):
+        def detect(window):
+            return [[(window[0], frame)] for frame in window]
+
+        frames = list(_selected_frames(range(7), 3, detect, CandidateRecorder(), stride=3))
+        self.assertEqual(frames, [
+            (0, [(0, 0)]),
+            (1, [(0, 1)]),
+            (2, [(0, 2)]),
+            (3, [(3, 3)]),
+            (4, [(3, 4)]),
+            (5, [(3, 5)]),
+            (6, []),
+        ])

@@ -14,8 +14,8 @@ REVISION = "923462cacdeb3353b84ddebdedb3f4b7a8553b0f"
 WEIGHTS_SHA256 = "9d391239ab10c733f8e5bfadf16ab72838e7a8ebc88e8ae2038501c03d42b4bb"
 
 
-def _selected_frames(frames, window_size, detect, tracker):
-    """Select each frame after all stride-1 windows that include it have run."""
+def _selected_frames(frames, window_size, detect, tracker, stride=1):
+    """Select each frame after all sampled windows that include it have run."""
     window = deque(maxlen=window_size)
     pending = defaultdict(list)
     next_frame = 0
@@ -23,21 +23,27 @@ def _selected_frames(frames, window_size, detect, tracker):
     for frame in frames:
         window.append(frame)
         frame_count += 1
-        if len(window) < window_size:
+        start = frame_count - window_size
+        if start < 0 or start % stride != 0:
             continue
         # The upstream Tennis loader assigns the oldest output to the first
         # frame of the window when frames_in == frames_out.
         for offset, candidates in enumerate(detect(window)):
-            pending[next_frame + offset].extend(candidates)
-        yield next_frame, tracker.update(pending.pop(next_frame))
-        next_frame += 1
+            pending[start + offset].extend(candidates)
+        for frame_index in range(start, start + stride):
+            yield frame_index, tracker.update(pending.pop(frame_index))
+        next_frame = start + stride
     for frame_index in range(next_frame, frame_count):
         yield frame_index, tracker.update(pending.pop(frame_index, []))
 
 
-def run_wasb(video: Video, upstream: Path, weights: Path, device: str = "cpu", threads: int = 4) -> dict:
+def run_wasb(
+    video: Video, upstream: Path, weights: Path, device: str = "cpu", threads: int = 4, stride: int = 1,
+) -> dict:
     if threads < 1:
         raise ValueError("--threads must be positive")
+    if stride not in (1, 3):
+        raise ValueError("--stride must be 1 or 3")
     try:
         revision = subprocess.check_output(
             ["git", "-C", str(upstream), "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL,
@@ -118,7 +124,7 @@ def run_wasb(video: Video, upstream: Path, weights: Path, device: str = "cpu", t
         np.Inf = np.inf
     try:
         with torch.inference_mode(), closing(decode_bgr_frames(video)) as frames:
-            for frame_index, result in _selected_frames(map(prepare, frames), window_size, detect, tracker):
+            for frame_index, result in _selected_frames(map(prepare, frames), window_size, detect, tracker, stride):
                 x, y = float(result["x"]), float(result["y"])
                 if result["visi"] and 0 <= x < video.width and 0 <= y < video.height:
                     points.append(BallPoint(frame_index, x, y, "measured"))
@@ -132,7 +138,7 @@ def run_wasb(video: Video, upstream: Path, weights: Path, device: str = "cpu", t
         "weights_sha256": WEIGHTS_SHA256,
         "input_width": input_wh[0],
         "input_height": input_wh[1],
-        "stride": 1,
+        "stride": stride,
         "frames_in": window_size,
         "frames_out": cfg["model"]["frames_out"],
         "batch_size": 1,

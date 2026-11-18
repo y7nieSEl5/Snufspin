@@ -62,12 +62,13 @@ def main() -> None:
     tracking.add_argument("--weights", type=Path, required=True)
     tracking.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     tracking.add_argument("--threads", type=int, default=4)
-    wasb = commands.add_parser("track-wasb", help="run the official WASB Tennis checkpoint at stride 1")
+    wasb = commands.add_parser("track-wasb", help="run the official WASB Tennis checkpoint")
     wasb.add_argument("video", type=Path)
     wasb.add_argument("--upstream", type=Path, required=True)
     wasb.add_argument("--weights", type=Path, required=True)
     wasb.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     wasb.add_argument("--threads", type=int, default=4)
+    wasb.add_argument("--stride", choices=(1, 3), type=int, default=1)
     args = parser.parse_args()
 
     try:
@@ -77,7 +78,7 @@ def main() -> None:
             print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command == "track-wasb":
-            report = run_wasb(video, args.upstream, args.weights, args.device, args.threads)
+            report = run_wasb(video, args.upstream, args.weights, args.device, args.threads, args.stride)
             print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command == "interpolate-track":
