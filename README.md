@@ -117,3 +117,23 @@ The CLI samples seven presentation frames by default. It fits a RANSAC homograph
 - For the three checked dataset videos, see the [CalTennis review](benchmarks/calibration/README.md). `import-caltennis` takes the original JSON and, for a size mismatch, requires an explicitly chosen pixel transform. `review-court` renders any sidecar on its matching video and accepts repeatable `--frame` arguments.
 
 Use `read_calibration(video, report)` from `snufspin.calibration` to verify a sidecar against the video digest and dimensions. `calibration.camera.project(xyz)` maps visible 3D points to source pixels. `calibration.camera.pixel_ray(uv)` returns the world-space camera center and a unit direction. `calibration.mapping.pixel_to_court(uv)` intersects a surface observation with the metric court. Camera coordinates follow `X_cam = R @ X_world + t`. The homography maps world XY to ideal pixels when supplied distortion is present, and the mapping methods apply the distortion model at the source-pixel boundary.
+
+### TEXflip line detector experiment
+
+`calibrate-court --detector texflip` uses the published tennis-trained LETR checkpoint. Install the optional dependencies and check out the tested revision.
+
+```bash
+python -m pip install -r requirements-texflip.txt
+GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/TEXflip/tennis-court-detection.git data/tennis-court/texflip
+git -C data/tennis-court/texflip checkout 49bae72d9f50d022be7d1aeeac4681f053a59188
+git -C data/tennis-court/texflip submodule update --init LETR
+```
+
+Save the [published checkpoint](https://drive.google.com/file/d/1kgPfxeYMSED6bu0xWP-KOSgLDukNPj5t/view) as `data/tennis-court/letr_best_checkpoint.pth`. The expected SHA-256 is `0f088c6f4dfef766bd10adc401e5012d255c07d699d9afae98da5976f821d829`.
+
+```bash
+python -m snufspin calibrate-court input.mp4 --detector texflip \
+  --review-dir outputs/texflip-review > input.camera.json
+```
+
+The line fitter targets rear views. It uses intersections of the detected segments to propose metric court homographies and chooses an assignment based on projected line overlap and alignment. Local image refinement centers the predicted segments on bright paint where it finds sufficient support. The resulting measured intersections go into the existing calibration solver. The heatmap detector remains the default. See the [matched comparison on the three amateur clips](benchmarks/calibration/texflip.md).
