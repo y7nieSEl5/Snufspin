@@ -95,3 +95,25 @@ Average speed is the summed 3D sample-to-sample distance divided by elapsed vide
 ## Credits
 
 Snufspin uses NTT Communications' WASB Tennis model and builds on Philipp Dubach's tennis-vision pipeline, yastrebksv's TennisProject and TrackNet model, and tracking design ideas from kzheng18's CourtVision. GridTrackNet's sample collection supplied the footage used for our tracking reviews. [Project credits and upstream notices](CREDITS.md)
+
+## Court calibration
+
+The metric court uses metres with the origin at the `baseline_a_doubles_low` intersection, +X toward baseline B, +Y toward the high sidelines, and the surface at `z = 0`. See [the named intersections and painted lines](snufspin/court.py). Automatic detection assigns baseline A to the near end in the detector's broadcast convention. Use manual names or an existing calibration when the physical orientation must be consistent across cameras.
+
+Set up the [published TennisCourtDetector checkpoint](https://github.com/yastrebksv/TennisCourtDetector#pretrained-model) as `data/tennis-court/model.pth`. The tested source revision and checkpoint digest are in [CREDITS.md](CREDITS.md). Then run:
+
+```bash
+git clone https://github.com/yastrebksv/TennisCourtDetector.git data/tennis-court/TennisCourtDetector
+git -C data/tennis-court/TennisCourtDetector checkout e5cd4f1ce26b15361700d3d89e068cbf0e82749e
+
+python -m snufspin calibrate-court input.mp4 --review-dir outputs/court-review > input.camera.json
+```
+
+The CLI samples seven presentation frames by default. It fits a RANSAC homography to named intersections in decoded pixels and checks the nearby brightness ridges along the projected painted lines. The diagnostics record the sampled landmarks, inliers, marking support, and pose checks. The fixed-camera solver requires marking agreement on a majority of the samples, with at least two frames. An inconsistent court or a failed marking check exits nonzero and writes diagnostics with `--review-dir`.
+
+- Supply known intrinsics with `--intrinsics intrinsics.json`. The file has fields `width`, `height`, `K` and optional `distortion` (OpenCV pinhole coefficients). `K` must already use the decoded pixel grid.
+- Supply manual points with `--landmarks landmarks.json` to use the same solver. The file maps zero-based presentation-frame indices to dictionaries of named `[u, v]` observations, for example `{"120": {"service_a_center": [616, 422]}}`. Label at least four noncollinear points in each of at least two frames for a full-camera solve.
+- With no supplied intrinsics, the solver uses perpendicular court directions to estimate a focal length in pixels with square pixels, a centered principal point, and zero assumed distortion. It keeps the court homography when the pose or focal length fails its checks. The sidecar then has `camera: null` and its mapping can locate a visible bounce on the surface.
+- For the three checked dataset videos, see the [CalTennis review](benchmarks/calibration/README.md). `import-caltennis` takes the original JSON and, for a size mismatch, requires an explicitly chosen pixel transform. `review-court` renders any sidecar on its matching video and accepts repeatable `--frame` arguments.
+
+Use `read_calibration(video, report)` from `snufspin.calibration` to verify a sidecar against the video digest and dimensions. `calibration.camera.project(xyz)` maps visible 3D points to source pixels. `calibration.camera.pixel_ray(uv)` returns the world-space camera center and a unit direction. `calibration.mapping.pixel_to_court(uv)` intersects a surface observation with the metric court. Camera coordinates follow `X_cam = R @ X_world + t`. The homography maps world XY to ideal pixels when supplied distortion is present, and the mapping methods apply the distortion model at the source-pixel boundary.

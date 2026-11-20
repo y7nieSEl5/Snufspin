@@ -1,0 +1,266 @@
+{
+  "03_04_2026_17_42_22_000_1_SW_18_25_20_878": {
+    "25": {
+      "baseline_a_singles_high": [
+        1132.8,
+        768.4
+      ],
+      "baseline_a_doubles_high": [
+        857.6,
+        812.4
+      ],
+      "service_a_singles_low": [
+        1491.2,
+        551.3
+      ],
+      "service_a_center": [
+        1138.5,
+        585.7
+      ],
+      "service_a_singles_high": [
+        669.4,
+        631.6
+      ],
+      "service_b_center": [
+        612.5,
+        508.9
+      ],
+      "service_b_singles_high": [
+        313.8,
+        526.5
+      ],
+      "baseline_b_doubles_high": [
+        148.5,
+        512.1
+      ]
+    },
+    "300": {
+      "baseline_a_singles_high": [
+        1132.8,
+        767.9
+      ],
+      "baseline_a_doubles_high": [
+        854.7,
+        812.6
+      ],
+      "service_a_singles_low": [
+        1490.1,
+        549.6
+      ],
+      "service_a_center": [
+        1139.3,
+        584.7
+      ],
+      "service_a_singles_high": [
+        670.3,
+        631.5
+      ],
+      "service_b_center": [
+        613.0,
+        508.5
+      ],
+      "service_b_singles_high": [
+        313.7,
+        526.4
+      ],
+      "baseline_b_doubles_high": [
+        147.8,
+        511.5
+      ]
+    },
+    "700": {
+      "baseline_a_singles_high": [
+        1134.6,
+        768.4
+      ],
+      "baseline_a_doubles_high": [
+        855.2,
+        813.5
+      ],
+      "service_a_singles_low": [
+        1489.6,
+        549.9
+      ],
+      "service_a_center": [
+        1140.3,
+        585.0
+      ],
+      "service_a_singles_high": [
+        671.5,
+        632.0
+      ],
+      "service_b_center": [
+        611.9,
+        508.7
+      ],
+      "service_b_singles_high": [
+        312.3,
+        526.2
+      ],
+      "baseline_b_doubles_high": [
+        149.2,
+        512.0
+      ]
+    }
+  },
+  "03_09_2026_17_16_43_000_3_SW_02_17_39_13_016": {
+    "25": {
+      "baseline_a_singles_high": [
+        1026.8,
+        681.3
+      ],
+      "baseline_a_doubles_high": [
+        761.5,
+        712.7
+      ],
+      "service_a_singles_low": [
+        1336.4,
+        492.0
+      ],
+      "service_a_center": [
+        1001.3,
+        507.2
+      ],
+      "service_a_singles_high": [
+        539.3,
+        528.3
+      ],
+      "service_b_singles_high": [
+        137.0,
+        402.0
+      ],
+      "baseline_b_singles_high": [
+        53.6,
+        375.8
+      ]
+    },
+    "300": {
+      "baseline_a_singles_high": [
+        1026.4,
+        681.4
+      ],
+      "service_a_singles_low": [
+        1332.2,
+        492.1
+      ],
+      "service_a_singles_high": [
+        540.1,
+        529.1
+      ],
+      "service_b_singles_high": [
+        129.6,
+        400.6
+      ],
+      "baseline_b_singles_high": [
+        51.5,
+        376.2
+      ]
+    },
+    "700": {
+      "baseline_a_singles_high": [
+        1027.2,
+        682.4
+      ],
+      "baseline_a_doubles_high": [
+        761.2,
+        713.9
+      ],
+      "service_a_singles_low": [
+        1336.9,
+        493.0
+      ],
+      "service_a_center": [
+        1001.4,
+        508.2
+      ],
+      "service_a_singles_high": [
+        539.2,
+        529.3
+      ],
+      "service_b_singles_high": [
+        131.2,
+        401.2
+      ],
+      "baseline_b_singles_high": [
+        54.9,
+        377.3
+      ]
+    }
+  },
+  "10_02_2025_08_14_59_000_court5_N_2_08_30_22_535": {
+    "25": {
+      "baseline_a_doubles_low": [
+        597.4,
+        386.9
+      ],
+      "baseline_a_singles_low": [
+        680.4,
+        387.0
+      ],
+      "service_b_singles_low": [
+        415.1,
+        587.3
+      ],
+      "service_b_center": [
+        1023.8,
+        589.8
+      ],
+      "service_b_singles_high": [
+        1603.1,
+        592.2
+      ],
+      "baseline_b_singles_low": [
+        55.8,
+        858.4
+      ]
+    },
+    "300": {
+      "baseline_a_doubles_low": [
+        591.9,
+        390.4
+      ],
+      "service_b_singles_low": [
+        412.0,
+        589.8
+      ],
+      "service_b_center": [
+        1019.4,
+        591.0
+      ],
+      "service_b_singles_high": [
+        1599.3,
+        592.2
+      ],
+      "baseline_b_singles_low": [
+        46.7,
+        865.7
+      ]
+    },
+    "700": {
+      "baseline_a_doubles_low": [
+        598.1,
+        386.8
+      ],
+      "baseline_a_singles_low": [
+        680.0,
+        387.1
+      ],
+      "service_b_singles_low": [
+        413.1,
+        588.3
+      ],
+      "service_b_center": [
+        1021.6,
+        590.5
+      ],
+      "service_b_singles_high": [
+        1601.9,
+        592.6
+      ],
+      "baseline_b_singles_low": [
+        46.3,
+        864.7
+      ]
+    }
+  }
+}

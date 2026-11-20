@@ -61,3 +61,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+### Court calibration
+
+- [TennisCourtDetector](https://github.com/yastrebksv/TennisCourtDetector/tree/e5cd4f1ce26b15361700d3d89e068cbf0e82749e) supplies the pretrained court heatmap model. The tested checkpoint from the upstream README has SHA-256 `09aa8c4338459ba1d643f2dc329f45f464dedec3720fccc1a4abfd1f7b464d04`.
+- [CalTennis](https://arxiv.org/html/2606.20542v1#S4) supplies the reference camera intrinsics and poses. The local landmark comparison uses the [published video dataset](https://huggingface.co/datasets/demalenk/caltennis).
+- [Hartley and Kaucic, *Sensitivity of calibration to principal point position*](https://users.cecs.anu.edu.au/~hartley/Papers/focal-lengths-2000/focal.pdf) discusses centered-principal-point calibration and its sensitivity. [OpenCV calib3d](https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html) supplies homography fitting, planar pose estimation, and projection.

@@ -24,7 +24,7 @@ def probe_video(path: Path) -> Video:
     path = path.resolve(strict=True)
     result = subprocess.run(
         [
-            "ffprobe", "-v", "error", "-protocol_whitelist", "file",
+            "ffprobe", "-v", "error", "-threads", "4", "-protocol_whitelist", "file",
             "-select_streams", "V:0", "-show_entries",
             "stream=width,height:frame=best_effort_timestamp_time", "-of", "json", str(path),
         ],

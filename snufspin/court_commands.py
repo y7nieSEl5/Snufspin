@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 
 from .calibration import Calibration, Camera, CourtMapping, Intrinsics, read_calibration
+from .court import LANDMARKS
 from .court_detector import TennisCourtDetector
 from .court_fit import fit_court
 from .court_review import write_overlay
@@ -73,6 +74,8 @@ def import_caltennis(video, path, transform):
             raise ValueError("expected vertical padding with matching image width")
         A[1, 2] = (video.height - height) // 2 if transform == "center-padding" else video.height - height
     camera = Camera(Intrinsics(A @ raw["K"], raw.get("dist_coeffs")), raw["R_w2c"], raw["t_w2c"])
+    if camera.center[2] <= 0 or np.any(camera.depth(list(LANDMARKS.values())) <= 0):
+        raise ValueError("CalTennis camera must be above the court with positive court depth")
     source = {
         "method": "CalTennis",
         "annotation_file": raw["annotation_file"],
@@ -95,8 +98,9 @@ def run_court_command(video, args, parser):
         calibration = read_calibration(video, read_json(args.calibration))
         indexes = args.frame if args.frame is not None else sample_indices(video, args.samples)
         args.review_dir.mkdir(parents=True, exist_ok=True)
+        camera = calibration.camera if calibration.source["method"] != "CalTennis" else None
         for index, frame in read_sample_frames(video, indexes):
-            write_overlay(args.review_dir / f"frame-{index:06}.png", frame, calibration.mapping)
+            write_overlay(args.review_dir / f"frame-{index:06}.png", frame, calibration.mapping, camera=camera)
         return
 
     intrinsics = None
