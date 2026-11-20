@@ -10,7 +10,7 @@ from .repair import interpolate_short_gaps
 from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
 from .tracknet import run_tracknet
-from .wasb import run_wasb
+from .wasb import WasbCandidateLog, run_wasb
 from .video import probe_video
 
 
@@ -69,6 +69,9 @@ def main() -> None:
     wasb.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     wasb.add_argument("--threads", type=int, default=4)
     wasb.add_argument("--stride", choices=(1, 3), type=int, default=1)
+    wasb.add_argument("--candidate-log", type=Path, help="write diagnostic candidate JSON to a new file")
+    wasb.add_argument("--candidate-frames", nargs=2, type=int, metavar=("FIRST", "LAST"),
+                      help="inclusive source frame range for --candidate-log")
     args = parser.parse_args()
 
     try:
@@ -78,7 +81,23 @@ def main() -> None:
             print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command == "track-wasb":
-            report = run_wasb(video, args.upstream, args.weights, args.device, args.threads, args.stride)
+            if (args.candidate_log is None) != (args.candidate_frames is None):
+                parser.error("--candidate-log and --candidate-frames must be provided together")
+            diagnostic = None if args.candidate_log is None else WasbCandidateLog(*args.candidate_frames)
+            if diagnostic is not None and args.candidate_log.exists():
+                raise ValueError(f"candidate log already exists: {args.candidate_log}")
+            report = run_wasb(
+                video, args.upstream, args.weights, args.device, args.threads, args.stride,
+                candidate_log=diagnostic,
+            )
+            if diagnostic is not None:
+                log = {key: value for key, value in report.items() if key != "ball_track"}
+                log["frames"] = [
+                    {**frame, "timestamp_s": video.time_at(frame["frame"])} for frame in diagnostic.frames
+                ]
+                with args.candidate_log.open("x", encoding="utf-8") as stream:
+                    json.dump(log, stream, indent=2, allow_nan=False)
+                    stream.write("\n")
             print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command == "interpolate-track":

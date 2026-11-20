@@ -2,6 +2,7 @@
 
 from collections import defaultdict, deque
 from contextlib import closing
+from dataclasses import dataclass, field
 from pathlib import Path
 import subprocess
 import sys
@@ -14,12 +15,53 @@ REVISION = "923462cacdeb3353b84ddebdedb3f4b7a8553b0f"
 WEIGHTS_SHA256 = "9d391239ab10c733f8e5bfadf16ab72838e7a8ebc88e8ae2038501c03d42b4bb"
 
 
-def _selected_frames(frames, window_size, detect, tracker, stride=1):
+@dataclass
+class WasbCandidateLog:
+    first_frame: int
+    last_frame: int
+    frames: list[dict] = field(default_factory=list, init=False)
+
+    def select(self, tracker, frame_index, candidates):
+        if not self.first_frame <= frame_index <= self.last_frame:
+            return tracker.update(candidates)
+
+        # Consult the pinned upstream gate before update advances its history.
+        passed = {id(candidate) for candidate in tracker._select_not_too_far(candidates)}
+        entries = [
+            {
+                "x_px": float(candidate["xy"][0]),
+                "y_px": float(candidate["xy"][1]),
+                "score": float(candidate["score"]),
+                "passed_gate": id(candidate) in passed,
+            }
+            for candidate in candidates
+        ]
+        selected = tracker.update(candidates)
+        winner = None
+        if selected["visi"]:
+            winner = next(
+                index for index, entry in enumerate(entries)
+                if entry["passed_gate"]
+                and (entry["x_px"], entry["y_px"], entry["score"])
+                == (selected["x"], selected["y"], selected["score"])
+            )
+        self.frames.append({"frame": frame_index, "candidates": entries, "selected_index": winner})
+        return selected
+
+
+def _selected_frames(frames, window_size, detect, tracker, stride=1, candidate_log=None):
     """Select each frame after all sampled windows that include it have run."""
     window = deque(maxlen=window_size)
     pending = defaultdict(list)
     next_frame = 0
     frame_count = 0
+
+    def select(frame_index):
+        candidates = pending.pop(frame_index, [])
+        if candidate_log is None:
+            return tracker.update(candidates)
+        return candidate_log.select(tracker, frame_index, candidates)
+
     for frame in frames:
         window.append(frame)
         frame_count += 1
@@ -31,19 +73,24 @@ def _selected_frames(frames, window_size, detect, tracker, stride=1):
         for offset, candidates in enumerate(detect(window)):
             pending[start + offset].extend(candidates)
         for frame_index in range(start, start + stride):
-            yield frame_index, tracker.update(pending.pop(frame_index))
+            yield frame_index, select(frame_index)
         next_frame = start + stride
     for frame_index in range(next_frame, frame_count):
-        yield frame_index, tracker.update(pending.pop(frame_index, []))
+        yield frame_index, select(frame_index)
 
 
 def run_wasb(
     video: Video, upstream: Path, weights: Path, device: str = "cpu", threads: int = 4, stride: int = 1,
+    *, candidate_log: WasbCandidateLog | None = None,
 ) -> dict:
     if threads < 1:
         raise ValueError("--threads must be positive")
     if stride not in (1, 3):
         raise ValueError("--stride must be 1 or 3")
+    if candidate_log is not None and not (
+        0 <= candidate_log.first_frame <= candidate_log.last_frame < len(video.timestamps_s)
+    ):
+        raise ValueError("--candidate-frames must be an inclusive range within the video")
     try:
         revision = subprocess.check_output(
             ["git", "-C", str(upstream), "rev-parse", "HEAD"], text=True, stderr=subprocess.DEVNULL,
@@ -124,7 +171,9 @@ def run_wasb(
         np.Inf = np.inf
     try:
         with torch.inference_mode(), closing(decode_bgr_frames(video)) as frames:
-            for frame_index, result in _selected_frames(map(prepare, frames), window_size, detect, tracker, stride):
+            for frame_index, result in _selected_frames(
+                map(prepare, frames), window_size, detect, tracker, stride, candidate_log,
+            ):
                 x, y = float(result["x"]), float(result["y"])
                 if result["visi"] and 0 <= x < video.width and 0 <= y < video.height:
                     points.append(BallPoint(frame_index, x, y, "measured"))
