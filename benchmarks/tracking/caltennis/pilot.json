@@ -1,0 +1,72 @@
+{
+  "revision": "4af17dd4d398aad4116a35b5a74de4388658d356",
+  "clips": [
+    {
+      "id": "oct2",
+      "source": "10_02_2025_08_00_court5/10_02_2025_08_14_59_000_court5_N_2_08_30_22_535.mp4",
+      "source_sha256": "c5d84ef763a60a9cf317efd64f0a059e48b81f6af14410e2bfcf07dc915a7283",
+      "role": "development",
+      "first_source_frame": 8092,
+      "frame_count": 3596,
+      "control_windows": [
+        [
+          270,
+          330
+        ],
+        [
+          1468,
+          1528
+        ],
+        [
+          2907,
+          2967
+        ]
+      ]
+    },
+    {
+      "id": "mar4",
+      "source": "03_04_2026_16_30_court1/03_04_2026_17_42_22_000_1_SW_18_25_20_878.mp4",
+      "source_sha256": "0215df97b86c8740f1f3e2c5825e7d4ee44a4b0563de00d4bf8e2f5050aaea44",
+      "role": "development",
+      "first_source_frame": 12585,
+      "frame_count": 3596,
+      "control_windows": [
+        [
+          569,
+          629
+        ],
+        [
+          1768,
+          1828
+        ],
+        [
+          2966,
+          3026
+        ]
+      ]
+    },
+    {
+      "id": "mar9",
+      "source": "03_09_2026_17_00_court1/03_09_2026_17_16_43_000_3_SW_02_17_39_13_016.mp4",
+      "source_sha256": "d7b387358f148c120bf7ba0c27f1c4c3ce8baaf1dff8269a4efb5f427e8f336a",
+      "role": "held_out",
+      "first_source_frame": 12587,
+      "frame_count": 3596,
+      "control_windows": [
+        [
+          569,
+          629
+        ],
+        [
+          1768,
+          1828
+        ],
+        [
+          2967,
+          3027
+        ]
+      ]
+    }
+  ],
+  "dataset": "demalenk/caltennis"
+}
