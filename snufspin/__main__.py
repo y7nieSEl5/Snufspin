@@ -3,6 +3,7 @@ import json
 import subprocess
 from pathlib import Path
 
+from .court_commands import add_court_commands, run_court_command
 from .evaluation import evaluate_review
 from .overlay import render_overlay
 from .pipeline import MetricPoint, MetricTrack, Shot, ShotLabels, analyze
@@ -66,12 +67,16 @@ def main() -> None:
     tracking.add_argument("--weights", type=Path, help="checkpoint (default: data/wasb/wasb_tennis_best.pth.tar)")
     tracking.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     tracking.add_argument("--threads", type=int, default=4)
+    add_court_commands(commands)
     args = parser.parse_args()
     if args.command in ("track", "track-wasb") and args.model_source is not None and args.weights is None:
         parser.error("--model-source requires explicit TrackNet --weights")
 
     try:
         video = probe_video(args.video)
+        if args.command in ("calibrate-court", "import-caltennis", "review-court"):
+            run_court_command(video, args, parser)
+            return
         if args.command in ("track", "track-wasb"):
             if args.model_source is not None:
                 report = run_tracknet(video, args.model_source, args.weights, args.device, args.threads)

@@ -39,10 +39,13 @@ class Intrinsics:
         pixels = np.asarray(pixels, dtype=np.float64).reshape(-1, 1, 2)
         if self.distortion is None and not normalized:
             return pixels.reshape(-1, 2)
-        return cv2.undistortPointsIter(
-            pixels, self.K, self.distortion, None, None if normalized else self.K,
-            (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS, 50, 1e-12),
-        ).reshape(-1, 2)
+        P = None if normalized else self.K
+        criteria = (cv2.TERM_CRITERIA_COUNT | cv2.TERM_CRITERIA_EPS, 50, 1e-12)
+        if hasattr(cv2, "undistortPointsIter"):
+            result = cv2.undistortPointsIter(pixels, self.K, self.distortion, None, P, criteria)
+        else:
+            result = cv2.undistortPoints(pixels, self.K, self.distortion, P=P, criteria=criteria)
+        return result.reshape(-1, 2)
 
     def distort(self, pixels):
         pixels = np.asarray(pixels, dtype=np.float64).reshape(-1, 2)

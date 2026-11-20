@@ -12,6 +12,7 @@ class Video:
     width: int
     height: int
     timestamps_s: tuple[float, ...]
+    first_pts_s: float = 0.0
 
     def time_at(self, frame: int) -> float:
         if type(frame) is not int or not 0 <= frame < len(self.timestamps_s):
@@ -46,7 +47,7 @@ def probe_video(path: Path) -> Video:
         raise ValueError("video frame timestamps must be finite and strictly increasing")
 
     start = timestamps[0]
-    return Video(path, stream["width"], stream["height"], tuple(t - start for t in timestamps))
+    return Video(path, stream["width"], stream["height"], tuple(t - start for t in timestamps), start)
 
 
 def decode_bgr_frames(video: Video) -> Iterator[bytes]:
@@ -67,3 +68,27 @@ def decode_bgr_frames(video: Video) -> Iterator[bytes]:
             raise ValueError("decoded more video frames than were found by ffprobe")
     finally:
         camera.release()
+
+
+def read_sample_frames(video: Video, indexes: list[int]):
+    """Read selected presentation frames using ffmpeg timestamp seeks."""
+    import numpy as np
+
+    for index in sorted(set(indexes)):
+        timestamp = video.time_at(index)
+        # Seek between this and the preceding frame to avoid rounding past its PTS.
+        seek = video.first_pts_s + (video.time_at(index - 1) + timestamp) / 2 if index else None
+        result = subprocess.run(
+            [
+                "ffmpeg", "-v", "error", "-nostdin", "-noautorotate",
+                "-protocol_whitelist", "file",
+                *([] if seek is None else ["-seek_timestamp", "1", "-ss", f"{seek:.9f}"]),
+                "-i", str(video.path), "-map", "0:V:0", "-frames:v", "1",
+                "-f", "rawvideo", "-pix_fmt", "bgr24", "-threads", "1", "-",
+            ],
+            capture_output=True,
+            check=True,
+        )
+        if len(result.stdout) != video.width * video.height * 3:
+            raise ValueError(f"could not decode sample frame {index} at the probed dimensions")
+        yield index, np.frombuffer(result.stdout, dtype=np.uint8).reshape(video.height, video.width, 3)
