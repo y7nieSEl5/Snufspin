@@ -11,6 +11,7 @@ from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
 from .tracknet import run_tracknet
 from .wasb import WasbCandidateLog, run_wasb
+from .wasb_motion import MotionSettings, replay_wasb
 from .video import probe_video
 
 
@@ -72,6 +73,16 @@ def main() -> None:
     wasb.add_argument("--candidate-log", type=Path, help="write diagnostic candidate JSON to a new file")
     wasb.add_argument("--candidate-frames", nargs=2, type=int, metavar=("FIRST", "LAST"),
                       help="inclusive source frame range for --candidate-log")
+    replay = commands.add_parser("replay-wasb", help="check cached WASB candidates against surrounding motion")
+    replay.add_argument("video", type=Path)
+    replay.add_argument("--ball-track", type=Path, required=True)
+    replay.add_argument("--candidate-log", type=Path, required=True)
+    replay.add_argument("--mode", choices=("reject", "rerank"), required=True)
+    replay.add_argument("--mask-radius", type=int, default=MotionSettings.mask_radius)
+    replay.add_argument("--side-frames", type=int, default=MotionSettings.side_frames)
+    replay.add_argument("--tolerance-heatmap-px", type=float, default=MotionSettings.tolerance_heatmap_px)
+    replay.add_argument("--max-extrapolation-s", type=float, default=MotionSettings.max_extrapolation_s)
+    replay.add_argument("--decision-log", type=Path, help="write per-frame decisions to a new JSON file")
     args = parser.parse_args()
 
     try:
@@ -104,6 +115,23 @@ def main() -> None:
             report = json.loads(args.ball_track.read_text(encoding="utf-8"))
             result = interpolate_short_gaps(video, report, args.max_gap_s)
             print(json.dumps(result, indent=2, allow_nan=False))
+            return
+        if args.command == "replay-wasb":
+            baseline = json.loads(args.ball_track.read_text(encoding="utf-8"))
+            candidates = json.loads(args.candidate_log.read_text(encoding="utf-8"))
+            settings = MotionSettings(
+                args.mask_radius, args.side_frames, args.tolerance_heatmap_px, args.max_extrapolation_s,
+            )
+            report, decisions = replay_wasb(video, baseline, candidates, args.mode, settings)
+            if args.decision_log is not None:
+                with args.decision_log.open("x", encoding="utf-8") as stream:
+                    json.dump({
+                        "video_sha256": report["video_sha256"],
+                        "source": report["source"],
+                        "frames": decisions,
+                    }, stream, indent=2, allow_nan=False)
+                    stream.write("\n")
+            print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command == "evaluate-track":
             report = json.loads(args.ball_track.read_text(encoding="utf-8"))
