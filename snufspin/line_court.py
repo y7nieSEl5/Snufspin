@@ -122,26 +122,28 @@ def refine_segments(image, segments):
     return refined
 
 
-def fit_lines(segments, width, height):
-    """Return named intersections measured from the matched LETR segments."""
+def _prepare_segments(segments, width, height):
     lengths = np.linalg.norm(segments[:, 1] - segments[:, 0], axis=1)
     order = np.argsort(-lengths, kind="stable")
     order = order[lengths[order] >= min(width, height) * 0.06]
     segments = segments[order]
-    if len(segments) < 4:
-        return {}
     length = lengths[order]
     angles = np.abs(segments[:, 1, 1] - segments[:, 0, 1]) / length
     transverse = np.flatnonzero(angles <= 0.38)[:12]
     longitudinal = np.flatnonzero(angles > 0.38)[:12]
     equations = np.cross(*np.moveaxis(np.dstack((segments, np.ones(segments.shape[:2]))), 1, 0))
     equations /= length[:, None]
+    return segments, length, equations, longitudinal, transverse
+
+
+def _line_hypotheses(segments, equations, longitudinal, transverse, width, height, limit):
     rects = _rectangles(longitudinal, transverse, equations, segments, width, height)
 
     tolerance = max(4.0, width / 120)
     paint = np.concatenate((_PAINT, np.ones((*_PAINT.shape[:2], 1))), axis=-1)
-    best = None
-    best_score = 0.0
+    best = []
+    anchors = np.array([(*xyz[:2], 1.0) for xyz in LANDMARKS.values()])
+    separation = max(2.0, width / 240)
     while batch := list(islice(rects, 24)):
         H = (np.asarray(batch)[:, None] @ _MODEL_RECTS).reshape(-1, 3, 3)
         depth = H[:, 2] @ _CORNERS.T
@@ -154,19 +156,65 @@ def fit_lines(segments, width, height):
         # Greedy upper bound followed by one-to-one scoring for competitive hypotheses.
         upper = scores.max(axis=2).sum(axis=1)
         for i in np.argsort(-upper):
-            if upper[i] <= best_score:
+            if len(best) >= limit and upper[i] <= best[-1][0]:
                 break
             model_ids, image_ids = linear_sum_assignment(scores[i], maximize=True)
             weights = scores[i, model_ids, image_ids]
             supported = weights >= 0.35
             total = weights.sum()
-            if total > best_score and np.count_nonzero(supported) >= 4:
-                best_score = total
-                best = dict(zip(model_ids[supported], image_ids[supported]))
+            if np.count_nonzero(supported) < 4:
+                continue
+            matches = dict(zip(model_ids[supported], image_ids[supported]))
+            if limit == 1:
+                if not best or total > best[0][0]:
+                    best = [(total, H[i], matches, None)]
+                continue
+            if len(best) >= limit and total <= best[-1][0]:
+                continue
+            projected_points = anchors @ H[i].T
+            projected_points = projected_points[:, :2] / projected_points[:, 2:]
+            duplicate = next((j for j, candidate in enumerate(best)
+                              if np.max(np.linalg.norm(projected_points - candidate[3], axis=1)) < separation),
+                             None)
+            if duplicate is not None:
+                if best[duplicate][0] >= total:
+                    continue
+                best.pop(duplicate)
+            best.append((total, H[i], matches, projected_points))
+            best.sort(key=lambda candidate: -candidate[0])
+            del best[limit:]
+    return best
 
-    if best is None:
+
+def fit_lines(segments, width, height):
+    """Return named intersections measured from the matched LETR segments."""
+    segments, length, equations, along, across = _prepare_segments(segments, width, height)
+    best = _line_hypotheses(segments, equations, along, across, width, height, 1)
+    return _intersections(segments, length, equations, best[0][2], width, height) if best else {}
+
+
+def line_hypotheses(segments, width, height, limit=24):
+    """Return distinct high-scoring metric homographies for image-based reranking."""
+    segments, length, equations, along, across = _prepare_segments(segments, width, height)
+    return [H for _, H, _, _ in _line_hypotheses(
+        segments, equations, along, across, width, height, limit,
+    )]
+
+
+def matched_landmarks(segments, mapping, width, height):
+    """Measure segment intersections once the court markings have been assigned."""
+    segments, length, equations, _, _ = _prepare_segments(segments, width, height)
+    if not len(segments):
         return {}
-    matches = {list(LINES)[model_id]: image_id for model_id, image_id in best.items()}
+    projected = mapping.project(_PAINT)
+    scores = _segment_scores(projected[None], segments, max(4.0, width / 120))[0]
+    ids, assigned = linear_sum_assignment(scores, maximize=True)
+    matches = {i: j for i, j in zip(ids, assigned) if scores[i, j] >= 0.35}
+    return _intersections(segments, length, equations, matches, width, height)
+
+
+def _intersections(segments, length, equations, matched_ids, width, height):
+    matches = {list(LINES)[model_id]: image_id for model_id, image_id in matched_ids.items()}
     landmarks = {}
     for name in LANDMARKS:
         line_kind, end_id, side = name.split("_", 2)
