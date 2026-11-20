@@ -1,0 +1,131 @@
+{
+  "revision": "4af17dd4d398aad4116a35b5a74de4388658d356",
+  "clips": [
+    {
+      "id": "oct2",
+      "role": "development",
+      "frame_count": 3596,
+      "review_frames": 265,
+      "windows": [
+        [
+          270,
+          330,
+          "control"
+        ],
+        [
+          1404,
+          1444,
+          "jump"
+        ],
+        [
+          1468,
+          1528,
+          "control"
+        ],
+        [
+          2907,
+          2967,
+          "control"
+        ],
+        [
+          3127,
+          3167,
+          "jump"
+        ]
+      ],
+      "weights_sha256": "9d391239ab10c733f8e5bfadf16ab72838e7a8ebc88e8ae2038501c03d42b4bb",
+      "decoded_candidates": 4508,
+      "candidate_log_sha256": "2c75660a51b3b07295354feec59f2b337804c8fddf93c59a53238b7960bbf013",
+      "track_sha256": "3ea8436a09ea9de895588ee1db8fc70810fac9fe4034468af2d13371e217edb4"
+    },
+    {
+      "id": "mar4",
+      "role": "development",
+      "frame_count": 3596,
+      "review_frames": 306,
+      "windows": [
+        [
+          257,
+          297,
+          "jump"
+        ],
+        [
+          414,
+          454,
+          "jump"
+        ],
+        [
+          569,
+          629,
+          "control"
+        ],
+        [
+          1768,
+          1828,
+          "control"
+        ],
+        [
+          2966,
+          3026,
+          "control"
+        ],
+        [
+          3123,
+          3163,
+          "slow_run"
+        ]
+      ],
+      "weights_sha256": "9d391239ab10c733f8e5bfadf16ab72838e7a8ebc88e8ae2038501c03d42b4bb",
+      "decoded_candidates": 3133,
+      "candidate_log_sha256": "15c767715231b709459396c19a813f99bd63386bf96cd2605f52c6efdf0d4884",
+      "track_sha256": "403df78bf02fd24ba4e1a826b36939f6346be8e7955d1cc675e5a8fcbab888c0"
+    },
+    {
+      "id": "mar9",
+      "role": "held_out",
+      "frame_count": 3596,
+      "review_frames": 347,
+      "windows": [
+        [
+          569,
+          629,
+          "control"
+        ],
+        [
+          726,
+          766,
+          "slow_run"
+        ],
+        [
+          1401,
+          1441,
+          "slow_run"
+        ],
+        [
+          1768,
+          1828,
+          "control"
+        ],
+        [
+          2967,
+          3027,
+          "control"
+        ],
+        [
+          3286,
+          3326,
+          "jump"
+        ],
+        [
+          3435,
+          3475,
+          "jump"
+        ]
+      ],
+      "weights_sha256": "9d391239ab10c733f8e5bfadf16ab72838e7a8ebc88e8ae2038501c03d42b4bb",
+      "decoded_candidates": 6060,
+      "candidate_log_sha256": "98689d6c0e07d68d005b66a71aa01c504fefcb4c3e7965774988f6a04ea34aee",
+      "track_sha256": "aaee8bb80e83a84b6e1da4cd35f72b66f8b63294db5479be530a5db66eb1da96"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # CalTennis candidate review pilot
 
-The pilot uses three one-minute excerpts at native resolution and timestamps. The camera can be placed wherever the ball is useful to review. The [pinned plan](pilot.json) records the CalTennis revision, original file paths and hashes, exact frame ranges, and control windows chosen from clean footage before inference. October 2 and March 4 are development sessions. March 9 is held out for evaluation. [CalTennis dataset](https://huggingface.co/datasets/demalenk/caltennis)
+The pilot uses three one-minute excerpts at native resolution and timestamps. The camera can be placed wherever the ball is useful to review. The [pinned plan](pilot.json) records the CalTennis revision, original file paths and hashes, exact frame ranges, and control windows chosen from clean footage before inference. The [excerpt manifest](excerpts.json) records the generated clip hashes and timing. October 2 and March 4 are development sessions. March 9 is held out for evaluation. [CalTennis dataset](https://huggingface.co/datasets/demalenk/caltennis)
 
 ## Review order
 
