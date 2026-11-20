@@ -4,14 +4,16 @@
 
 | Project | Contribution to Snufspin |
 | --- | --- |
-| philippdubach/tennis-vision | Baseline pipeline reference, cached detection artifact format, and the ball detector's input ordering, per-axis coordinate scaling, mask conversion, and candidate distance gate. |
-| yastrebksv/TennisProject | External `BallTrackerNet` architecture loaded by the local Python tracker, pinned to `b7552e955253c008c7612298cb40694682a74ef9`. |
+| nttcom/WASB-SBDT | Default WASB Tennis model and official preprocessing, heatmap decoding, and candidate selection. |
+| philippdubach/tennis-vision | Legacy TrackNet pipeline reference and cached detection artifact format. |
+| yastrebksv/TennisProject | External `BallTrackerNet` architecture for legacy runs, pinned to `b7552e955253c008c7612298cb40694682a74ef9`. |
 | yastrebksv/TrackNet | TrackNet implementation and the pretrained ball checkpoint linked by tennis-vision and TennisProject. |
 | kzheng18/court-vision | Design reference for keeping measured, interpolated, and predicted positions distinguishable and evaluating tracking before downstream analytics. |
 | VKorpelshoek/GridTrackNet | Public amateur and professional sample videos used for local tracking review. The source-video Git blob hashes and excerpt ranges are recorded in the benchmark manifests. |
 
-Project sources are linked below. The current runner uses the external TennisProject model architecture with Snufspin's Python inference wrapper and interpolation. CourtVision and GridTrackNet contributed design references and review footage respectively.
+Snufspin loads the WASB model and tracker from the external checkout pinned in the setup instructions.
 
+- [WASB-SBDT by NTT Communications](https://github.com/nttcom/WASB-SBDT/tree/923462cacdeb3353b84ddebdedb3f4b7a8553b0f)
 - [tennis-vision by Philipp Dubach](https://github.com/philippdubach/tennis-vision)
 - [TennisProject by yastrebksv](https://github.com/yastrebksv/TennisProject)
 - [TrackNet by yastrebksv](https://github.com/yastrebksv/TrackNet)
@@ -30,7 +32,9 @@ PyTorch runs the neural model, OpenCV resizes frames and extracts ball candidate
 
 ## Model and data provenance
 
-The reviewed checkpoint has SHA-256 `c735bc1a1b13a35f179c6492f778ef4ebb9bffd512a96f4d970b32e076653076`. It is the ball model linked by yastrebksv/TrackNet. The pinned TennisProject source has no top-level license file in the inspected revision. Snufspin loads that source from an external checkout. Checkpoint hashes and footage origins are recorded in the benchmark manifests.
+The default WASB Tennis checkpoint has SHA-256 `9d391239ab10c733f8e5bfadf16ab72838e7a8ebc88e8ae2038501c03d42b4bb`. The pinned upstream source carries an MIT license. [WASB model zoo](https://github.com/nttcom/WASB-SBDT/blob/923462cacdeb3353b84ddebdedb3f4b7a8553b0f/MODEL_ZOO.md) · [Upstream license](https://github.com/nttcom/WASB-SBDT/blob/923462cacdeb3353b84ddebdedb3f4b7a8553b0f/LICENSE.md)
+
+The historical TrackNet checkpoint has SHA-256 `c735bc1a1b13a35f179c6492f778ef4ebb9bffd512a96f4d970b32e076653076`. It is the ball model linked by yastrebksv/TrackNet. The pinned TennisProject source has no top-level license file in the inspected revision. Checkpoint hashes and footage origins are recorded in the benchmark manifests.
 
 ## tennis-vision MIT notice
 

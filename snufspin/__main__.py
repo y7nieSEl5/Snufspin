@@ -10,6 +10,7 @@ from .repair import interpolate_short_gaps
 from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
 from .tracknet import run_tracknet
+from .wasb import run_wasb
 from .video import probe_video
 
 
@@ -55,18 +56,29 @@ def main() -> None:
     repair.add_argument("video", type=Path)
     repair.add_argument("--ball-track", type=Path, required=True)
     repair.add_argument("--max-gap-s", type=float, default=0.15)
-    tracking = commands.add_parser("track", help="run the ball detector locally from Python")
+    tracking = commands.add_parser(
+        "track", aliases=["track-wasb"], help="run the pinned WASB Tennis tracker at stride 1",
+    )
     tracking.add_argument("video", type=Path)
-    tracking.add_argument("--model-source", type=Path, required=True)
-    tracking.add_argument("--weights", type=Path, required=True)
+    sources = tracking.add_mutually_exclusive_group()
+    sources.add_argument("--upstream", type=Path, help="pinned WASB checkout (default: data/wasb/WASB-SBDT)")
+    sources.add_argument("--model-source", type=Path, help="explicitly use the legacy TrackNet model")
+    tracking.add_argument("--weights", type=Path, help="checkpoint (default: data/wasb/wasb_tennis_best.pth.tar)")
     tracking.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     tracking.add_argument("--threads", type=int, default=4)
     args = parser.parse_args()
+    if args.command in ("track", "track-wasb") and args.model_source is not None and args.weights is None:
+        parser.error("--model-source requires explicit TrackNet --weights")
 
     try:
         video = probe_video(args.video)
-        if args.command == "track":
-            report = run_tracknet(video, args.model_source, args.weights, args.device, args.threads)
+        if args.command in ("track", "track-wasb"):
+            if args.model_source is not None:
+                report = run_tracknet(video, args.model_source, args.weights, args.device, args.threads)
+            else:
+                upstream_path = args.upstream or Path("data/wasb/WASB-SBDT")
+                weights = args.weights or Path("data/wasb/wasb_tennis_best.pth.tar")
+                report = run_wasb(video, upstream_path, weights, args.device, args.threads)
             print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command == "interpolate-track":

@@ -1,5 +1,7 @@
 # Tracking review and first post-processing experiment
 
+These records describe the historical TrackNet baseline at `tracking-baseline-v1`. The current default tracker is documented in the [Snufspin README](../../README.md).
+
 ## Decision
 
 The user accepted the three fresh demos as sufficient for starting monocular 3D reconstruction. The pinned baseline, `tracking-baseline-v1`, uses the upstream detector with short-gap interpolation at a maximum endpoint separation of 0.15 seconds. One isolated hardcourt misidentification near a player's body was reported and accepted as a known limitation. Its frame number has not been identified. The next development stage is 3D reconstruction, including robust treatment of isolated bad observations.
@@ -54,7 +56,7 @@ The baseline used tennis-vision revision `a501953194f5207534273c7b2b59c0b642df7a
 
 The local Python runner was checked on the full 100-frame fresh hardcourt excerpt. Every raw detector position matched the frozen baseline exactly (94 positions), and every position after interpolation matched the frozen candidate (96 positions). The overlay preserved all 100 source frame timestamps. CPU inference was used for this comparison. It uses OpenCV decoding to reproduce the reviewed detector's input pixels.
 
-With NumPy, PyTorch, and OpenCV available, run the candidate diagnostic using the local TennisProject `tracknet.py` and pretrained checkpoint from the local setup instructions.
+With NumPy, PyTorch, and OpenCV available, run the candidate diagnostic using the local TennisProject `tracknet.py` and pretrained checkpoint from the setup instructions at `tracking-baseline-v1`.
 
 ```sh
 python -m snufspin.diagnostics outputs/tennis-vision-baseline/source.mp4 \
