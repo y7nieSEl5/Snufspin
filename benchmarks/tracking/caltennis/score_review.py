@@ -31,15 +31,20 @@ def score(log, labels):
             raise ValueError(f"label timestamp differs at frame {frame}")
         selected = rec["selected_index"]
         candidates = rec["candidates"]
+        winner = candidates[selected] if selected is not None else None
+        emits_position = winner is not None and (
+            0 <= winner["x_px"] < log["width"] and 0 <= winner["y_px"] < log["height"]
+        )
         if hand == "yes":
-            if selected is None:
+            if not emits_position:
                 raise ValueError(f"frame {frame} has no winner to mark as hand")
             hand_frames.add(frame)
-        row = {"frame": frame, "status": status, "winner_on_hand": hand, "selected_index": selected}
+        row = {"frame": frame, "status": status, "winner_on_hand": hand, "selected_index": selected,
+               "emits_position": emits_position}
         if status:
             visibility[status] += 1
         if status in {"occluded", "out_of_frame"}:
-            hidden_with_position[status] += selected is not None
+            hidden_with_position[status] += emits_position
         if status == "visible":
             x, y = float(label["x_px"]), float(label["y_px"])
             if not (0 <= x < log["width"] and 0 <= y < log["height"]):
@@ -50,7 +55,7 @@ def score(log, labels):
             for limit, tally in counts.items():
                 near = [i for i, distance in enumerate(distances) if distance <= limit]
                 allowed = [i for i in near if candidates[i]["passed_gate"]]
-                if selected in near:
+                if emits_position and selected in near:
                     outcome = "correct_candidate_won"
                 elif allowed:
                     outcome = "correct_candidate_lost_on_score"
