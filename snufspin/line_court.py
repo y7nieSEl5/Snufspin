@@ -79,6 +79,49 @@ def _segment_scores(predicted, segments, tolerance):
     return alignment * fraction * (0.5 + 0.5 * coverage)
 
 
+def refine_segments(image, segments):
+    """Center near-court segment proposals on bright paint in source pixels."""
+    if not len(segments):
+        return segments
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    height, width = gray.shape
+    radius = max(5, round(width / 100))
+    offsets = np.arange(-radius - 6, radius + 7, dtype=float)
+    refined = segments.copy()
+    for index, (a, b) in enumerate(segments):
+        delta = b - a
+        length = np.linalg.norm(delta)
+        if length < min(width, height) * 0.06:
+            continue
+        tangent = delta / length
+        normal = tangent[::-1] * [-1, 1]
+        centers = np.linspace(a, b, 81)
+        grid = centers[:, None] + offsets[None, :, None] * normal
+        valid = np.all((grid >= 0) & (grid < [width - 1, height - 1]), axis=(1, 2))
+        if valid.sum() < 20:
+            continue
+        grid = grid[valid].astype(np.float32)
+        values = cv2.remap(gray, grid[..., 0], grid[..., 1], cv2.INTER_LINEAR).astype(float)
+        # Compare each candidate to the surface on either side of the paint.
+        smoothed = (values[:, 5:-7] + 2 * values[:, 6:-6] + values[:, 7:-5]) / 4
+        prominence = smoothed - np.maximum(values[:, :-12], values[:, 12:])
+        best = (prominence - np.abs(offsets[6:-6]) * 0.35).argmax(axis=1)
+        rows = np.arange(len(values))
+        good = prominence[rows, best] >= 12
+        if good.sum() < max(14, len(rows) * 0.35):
+            continue
+        observed = grid[rows[good], best[good] + 6]
+        if np.ptp(observed @ tangent) < length * 0.50:
+            continue
+        vx, vy, x, y = cv2.fitLine(observed, cv2.DIST_WELSCH, 0, 0.01, 0.01).ravel()
+        axis = np.array([vx, vy])
+        origin = np.array([x, y])
+        endpoints = origin + ((np.array([a, b]) - origin) @ axis)[:, None] * axis
+        if np.linalg.norm(endpoints - [a, b], axis=1).max() <= radius + 3:
+            refined[index] = endpoints
+    return refined
+
+
 def fit_lines(segments, width, height):
     """Return named intersections measured from the matched LETR segments."""
     lengths = np.linalg.norm(segments[:, 1] - segments[:, 0], axis=1)

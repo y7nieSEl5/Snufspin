@@ -32,3 +32,15 @@ class LineCourtTests(unittest.TestCase):
 
         segments = np.array([[[100, y], [500, y]] for y in range(100, 500, 40)])
         self.assertEqual(fit_lines(segments, 1920, 1080), {})
+
+    def test_refinement_centers_a_segment_on_paint(self):
+        import cv2
+
+        from snufspin.line_court import refine_segments
+
+        frame = np.full((720, 1280, 3), 70, dtype=np.uint8)
+        cv2.line(frame, (100, 445), (1100, 445), (250, 250, 250), 5)
+        segments = np.array([[[120, 455], [1080, 455]], [[120, 100], [1080, 100]]], dtype=float)
+        refined = refine_segments(frame, segments)
+        np.testing.assert_allclose(refined[0, :, 1], 445, atol=2)
+        np.testing.assert_array_equal(refined[1], segments[1])
