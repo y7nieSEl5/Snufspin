@@ -115,12 +115,12 @@ def run_court_command(video, args, parser):
         frames = dict(read_sample_frames(video, indexes))
         if args.detector == "texflip":
             from .letr import LETR
-            from .line_court import fit_lines
+            from .line_court import fit_lines, refine_segments
 
             detector = LETR(args.model_source or DETECTOR / "texflip",
                             args.weights or DETECTOR / "letr_best_checkpoint.pth",
                             args.device, args.threads)
-            landmarks = {index: fit_lines(detector(frame), video.width, video.height)
+            landmarks = {index: fit_lines(refine_segments(frame, detector(frame)), video.width, video.height)
                          for index, frame in frames.items()}
         else:
             detector = TennisCourtDetector(args.model_source or DETECTOR / "TennisCourtDetector/tracknet.py",
