@@ -61,3 +61,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+### Court calibration
+
+- TEXflip provides the tennis-trained LETR model and line-fitting approach. The tested source uses LETR submodule revision `814e4e2c538de36ccca45abc68cb1e1cfaaf98a4`. [TEXflip tennis-court-detection](https://github.com/TEXflip/tennis-court-detection/tree/49bae72d9f50d022be7d1aeeac4681f053a59188)
+- Farin et al. describe the paint-based template scoring rule adapted for fixed-camera fallback. [Robust Camera Calibration for Sport Videos using Court Models](https://www.dirk-farin.net/publications/data/Farin2004b.pdf#page=9)
+- TennisCourtDetector provides the optional heatmap detector. [Pretrained model](https://github.com/yastrebksv/TennisCourtDetector#pretrained-model)
+- CalTennis provides the reference camera conventions and calibrations. [CalTennis calibration method](https://arxiv.org/html/2606.20542v1#S4)

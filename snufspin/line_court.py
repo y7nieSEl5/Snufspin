@@ -201,18 +201,6 @@ def line_hypotheses(segments, width, height, limit=24):
     )]
 
 
-def matched_landmarks(segments, mapping, width, height):
-    """Measure segment intersections once the court markings have been assigned."""
-    segments, length, equations, _, _ = _prepare_segments(segments, width, height)
-    if not len(segments):
-        return {}
-    projected = mapping.project(_PAINT)
-    scores = _segment_scores(projected[None], segments, max(4.0, width / 120))[0]
-    ids, assigned = linear_sum_assignment(scores, maximize=True)
-    matches = {i: j for i, j in zip(ids, assigned) if scores[i, j] >= 0.35}
-    return _intersections(segments, length, equations, matches, width, height)
-
-
 def _intersections(segments, length, equations, matched_ids, width, height):
     matches = {list(LINES)[model_id]: image_id for model_id, image_id in matched_ids.items()}
     landmarks = {}

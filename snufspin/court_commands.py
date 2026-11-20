@@ -1,8 +1,10 @@
 """CLI entry points for importing and fitting court calibrations."""
 
+from argparse import BooleanOptionalAction
 import json
 from pathlib import Path
 
+import cv2
 import numpy as np
 
 from .calibration import Calibration, Camera, CourtMapping, Intrinsics, read_calibration
@@ -21,7 +23,9 @@ def add_court_commands(commands):
     fit.add_argument("video", type=Path)
     fit.add_argument("--landmarks", type=Path, help="JSON map of frame indices to named source pixels")
     fit.add_argument("--intrinsics", type=Path, help="JSON with decoded width, height, K and optional distortion")
-    fit.add_argument("--detector", choices=("heatmap", "texflip"), default="heatmap")
+    fit.add_argument("--detector", choices=("heatmap", "texflip"), default="texflip")
+    fit.add_argument("--paint-fallback", action=BooleanOptionalAction, default=False,
+                     help="try shared paint selection when TEXflip frame fits disagree on a fixed-camera clip")
     fit.add_argument("--model-source", type=Path, help="heatmap model Python file or TEXflip checkout")
     fit.add_argument("--weights", type=Path, help="checkpoint for the selected detector")
     fit.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
@@ -89,6 +93,26 @@ def import_caltennis(video, path, transform):
     return Calibration(CourtMapping.from_camera(camera), source, camera)
 
 
+def _try_paint_fallback(frames, segments, intrinsics, source, diagnostics):
+    from .court_paint import select_paint_mapping
+
+    if intrinsics is not None and intrinsics.distortion is not None and np.any(intrinsics.distortion):
+        # Rank ideal straight lines in the undistorted grid. Keep the distortion
+        # in the output mapping so callers can still use original video pixels.
+        frames = {i: cv2.undistort(image, intrinsics.K, intrinsics.distortion)
+                  for i, image in frames.items()}
+        segments = {i: intrinsics.undistort(lines).reshape(lines.shape) if len(lines) else lines
+                    for i, lines in segments.items()}
+    winner, _, paint = select_paint_mapping(frames, segments)
+    diagnostics["paint_fallback"] = {"trigger": diagnostics["status"], **paint}
+    if winner is None:
+        return None
+    diagnostics["status"] = "court_mapping_only"
+    diagnostics["pose_status"] = "paint_fallback_estimates_plane_only"
+    return Calibration(CourtMapping(winner.mapping.H, intrinsics),
+                       {**source, "mapping_method": "shared_paint_fallback"})
+
+
 def run_court_command(video, args, parser):
     if args.command == "import-caltennis":
         report = import_caltennis(video, args.calibration, args.pixel_transform).to_report(video)
@@ -111,6 +135,7 @@ def run_court_command(video, args, parser):
             raise ValueError("supplied intrinsics must already be expressed in decoded video pixels")
         intrinsics = Intrinsics(supplied["K"], supplied.get("distortion"))
     indexes = sample_indices(video, args.samples)
+    segments = None
     if args.landmarks is None:
         frames = dict(read_sample_frames(video, indexes))
         if args.detector == "texflip":
@@ -120,8 +145,8 @@ def run_court_command(video, args, parser):
             detector = LETR(args.model_source or DETECTOR / "texflip",
                             args.weights or DETECTOR / "letr_best_checkpoint.pth",
                             args.device, args.threads)
-            landmarks = {index: fit_lines(refine_segments(frame, detector(frame)), video.width, video.height)
-                         for index, frame in frames.items()}
+            segments = {index: refine_segments(frame, detector(frame)) for index, frame in frames.items()}
+            landmarks = {index: fit_lines(lines, video.width, video.height) for index, lines in segments.items()}
         else:
             detector = TennisCourtDetector(args.model_source or DETECTOR / "TennisCourtDetector/tracknet.py",
                                            args.weights or DETECTOR / "model.pth", args.device, args.threads)
@@ -137,6 +162,9 @@ def run_court_command(video, args, parser):
     if args.intrinsics is not None:
         source["intrinsics_sha256"] = file_sha256(args.intrinsics)
     calibration, diagnostics = fit_court(frames, landmarks, source, intrinsics)
+    if (args.paint_fallback and segments is not None
+            and calibration is None and diagnostics["status"] == "inconsistent_court_across_frames"):
+        calibration = _try_paint_fallback(frames, segments, intrinsics, source, diagnostics)
     diagnostics["landmarks"] = landmarks
     if args.review_dir is not None:
         args.review_dir.mkdir(parents=True, exist_ok=True)

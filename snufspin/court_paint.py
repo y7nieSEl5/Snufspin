@@ -8,7 +8,7 @@ import numpy as np
 from .calibration import CourtMapping
 from .court import LANDMARKS, LINES
 from .court_review import markings_agree
-from .line_court import line_hypotheses, matched_landmarks
+from .line_court import line_hypotheses
 
 _SEGMENTS = {line: np.array([LANDMARKS[n][:2] for n in ends]) for line, ends in LINES.items()}
 _ANCHORS = np.array(list(LANDMARKS.values()))[:, :2]
@@ -123,11 +123,3 @@ def select_paint_mapping(frames, segments):
                 return None, gray, diagnostics
             break
     return winner, gray, diagnostics
-
-
-def measured_landmarks(candidate, segments, width, height):
-    """Return only observed LETR intersections close to the selected court."""
-    predicted = dict(zip(LANDMARKS, candidate.mapping.project(_ANCHORS)))
-    return {index: {name: uv for name, uv in matched_landmarks(lines, candidate.mapping, width, height).items()
-                    if np.linalg.norm(uv - predicted[name]) <= max(6.0, width / 120)}
-            for index, lines in segments.items()}

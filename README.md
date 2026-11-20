@@ -95,3 +95,61 @@ Average speed is the summed 3D sample-to-sample distance divided by elapsed vide
 ## Credits
 
 Snufspin uses NTT Communications' WASB Tennis model and builds on Philipp Dubach's tennis-vision pipeline, yastrebksv's TennisProject and TrackNet model, and tracking design ideas from kzheng18's CourtVision. GridTrackNet's sample collection supplied the footage used for our tracking reviews. [Project credits and upstream notices](CREDITS.md)
+
+## Fixed-camera court calibration
+
+`calibrate-court` defaults to TEXflip's tennis-trained LETR detector. Install its optional
+dependencies and the tested source and checkpoint before running it.
+
+```bash
+python -m pip install -r requirements-texflip.txt
+GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/TEXflip/tennis-court-detection.git data/tennis-court/texflip
+git -C data/tennis-court/texflip checkout 49bae72d9f50d022be7d1aeeac4681f053a59188
+git -C data/tennis-court/texflip submodule update --init LETR
+```
+
+Save the [published checkpoint](https://drive.google.com/file/d/1kgPfxeYMSED6bu0xWP-KOSgLDukNPj5t/view)
+as `data/tennis-court/letr_best_checkpoint.pth`. Its SHA-256 is
+`0f088c6f4dfef766bd10adc401e5012d255c07d699d9afae98da5976f821d829`.
+
+```bash
+python -m snufspin calibrate-court input.mp4 --review-dir outputs/court-review > input.camera.json
+```
+
+For fixed-camera footage, pass `--paint-fallback` to try Farin-style shared paint selection
+when TEXflip's individually supported frame fits disagree. The fallback keeps the original
+decision for successful fits and other rejection categories. It writes a court-plane mapping
+when a clear winner has paint support in both directions across multiple frames. A tied
+selection leaves the clip unresolved. The `review-dir` diagnostics record which path fired.
+
+`--detector heatmap` selects the older TennisCourtDetector, using its
+[published source and checkpoint](https://github.com/yastrebksv/TennisCourtDetector#pretrained-model).
+`--landmarks` supplies manual source-pixel points as a JSON object keyed by zero-based frame
+index and [court landmark name](snufspin/court.py). `--intrinsics` accepts decoded `width`,
+`height`, `K` and optional OpenCV `distortion`. For a supplied CalTennis camera, use
+`import-caltennis VIDEO CALIBRATION` with an explicit `--pixel-transform` for a size
+mismatch. Use `review-court VIDEO SIDECAR --review-dir DIR` to inspect the court overlay.
+
+The JSON sidecar is tied to the exact video. It contains the metric court-plane mapping
+and, when available, the full camera `K, R, t`. A plane-only sidecar supports court-contact
+locations via `pixel_to_court`. A full camera also supports world-space rays and projection
+above the court.
+
+## Gravity-only flight fit
+
+Choose a single airborne interval bounded by zero-based presentation frames. Use a ball
+track and full calibration sidecar for that same video.
+
+```bash
+python -m snufspin fit-flight input.mp4 --ball-track input.track.json --calibration input.camera.json \
+  --start-frame 2966 --end-frame 3021 > input.flight.json
+```
+
+The fit models constant horizontal velocity and vertical acceleration of
+`-9.80665 m/s²`. It uses the actual timestamps, seeds the trajectory from calibrated rays,
+and refines in source pixels. Only manual and measured detections provide evidence.
+The output includes the inlier and excluded frames, reprojection errors, velocity at
+the first fitted sample, and a `metric_track` compatible with the shot observation schema.
+The returned trajectory spans the supporting measurements within the requested interval.
+A single fit covers one flight segment between contacts or bounces. Drag, spin and speed
+validation against independent 3D measurements are future steps.
