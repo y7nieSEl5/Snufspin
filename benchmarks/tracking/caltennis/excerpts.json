@@ -1,0 +1,35 @@
+{
+  "dataset_revision": "4af17dd4d398aad4116a35b5a74de4388658d356",
+  "clips": [
+    {
+      "id": "oct2",
+      "clip_sha256": "49679b899b242bb7be0cfd5b961d40642824346d81cee510c2629ecb5ad0bd1e",
+      "width": 1920,
+      "height": 1088,
+      "first_source_timestamp_s": 135.001668,
+      "last_source_timestamp_s": 194.978312,
+      "last_clip_timestamp_s": 59.976643,
+      "timestamps_file": "outputs/caltennis-pilot/oct2/provenance.json"
+    },
+    {
+      "id": "mar4",
+      "clip_sha256": "6911dc53d5b0654257264c96cdc37d133e99f3821f036a184ad01bfc498403e9",
+      "width": 1920,
+      "height": 1088,
+      "first_source_timestamp_s": 209.994994,
+      "last_source_timestamp_s": 269.981645,
+      "last_clip_timestamp_s": 59.986651,
+      "timestamps_file": "outputs/caltennis-pilot/mar4/provenance.json"
+    },
+    {
+      "id": "mar9",
+      "clip_sha256": "25453b9e2ef140c60697ddd0e3d01497cf7718eb4b7c104c85c6888840dc6585",
+      "width": 1920,
+      "height": 1088,
+      "first_source_timestamp_s": 209.993327,
+      "last_source_timestamp_s": 269.96997,
+      "last_clip_timestamp_s": 59.976643,
+      "timestamps_file": "outputs/caltennis-pilot/mar9/provenance.json"
+    }
+  ]
+}

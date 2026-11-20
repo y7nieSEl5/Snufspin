@@ -39,8 +39,11 @@ def score(log, labels):
             if not emits_position:
                 raise ValueError(f"frame {frame} has no winner to mark as hand")
             hand_frames.add(frame)
-        row = {"frame": frame, "status": status, "winner_on_hand": hand, "selected_index": selected,
-               "emits_position": emits_position}
+        row = {
+            "frame": frame, "window": label.get("window"), "status": status,
+            "winner_on_hand": hand, "selected_index": selected, "emits_position": emits_position,
+            "notes": label.get("notes", ""),
+        }
         if status:
             visibility[status] += 1
         if status in {"occluded", "out_of_frame"}:
@@ -93,7 +96,18 @@ def main():
     args = parser.parse_args()
     log = json.loads(args.candidates.read_text(encoding="utf-8"))
     with args.labels.open(newline="", encoding="utf-8-sig") as stream:
-        result = score(log, csv.DictReader(stream))
+        labels = list(csv.DictReader(stream))
+    result = score(log, labels)
+    if any(label.get("window") for label in labels):
+        groups = {
+            "control": [label for label in labels if label.get("window") == "control"],
+            "mined": [label for label in labels if label.get("window") in {"jump", "slow_run"}],
+        }
+        result["by_window_source"] = {}
+        for name, group in groups.items():
+            subgroup = score(log, group)
+            del subgroup["frames"]
+            result["by_window_source"][name] = subgroup
     print(json.dumps(result, indent=2, allow_nan=False))
 
 
