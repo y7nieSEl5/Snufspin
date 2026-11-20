@@ -1,4 +1,5 @@
 import argparse
+from dataclasses import asdict
 import json
 import subprocess
 from pathlib import Path
@@ -6,7 +7,7 @@ from pathlib import Path
 from .court_commands import add_court_commands, run_court_command
 from .evaluation import evaluate_review
 from .overlay import render_overlay
-from .pipeline import MetricPoint, MetricTrack, Shot, ShotLabels, analyze
+from .pipeline import MetricPoint, MetricTrack, Shot, ShotLabels, analyze, summarize_speed
 from .repair import interpolate_short_gaps
 from .tennis_vision import import_ball_track
 from .tracking import BallPoint, read_ball_track
@@ -67,6 +68,12 @@ def main() -> None:
     tracking.add_argument("--weights", type=Path, help="checkpoint (default: data/wasb/wasb_tennis_best.pth.tar)")
     tracking.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     tracking.add_argument("--threads", type=int, default=4)
+    flight = commands.add_parser("fit-flight", help="fit a gravity-only 3D arc over one airborne interval")
+    flight.add_argument("video", type=Path)
+    flight.add_argument("--ball-track", type=Path, required=True)
+    flight.add_argument("--calibration", type=Path, required=True)
+    flight.add_argument("--start-frame", type=int, required=True)
+    flight.add_argument("--end-frame", type=int, required=True)
     add_court_commands(commands)
     args = parser.parse_args()
     if args.command in ("track", "track-wasb") and args.model_source is not None and args.weights is None:
@@ -76,6 +83,24 @@ def main() -> None:
         video = probe_video(args.video)
         if args.command in ("calibrate-court", "import-caltennis", "review-court"):
             run_court_command(video, args, parser)
+            return
+        if args.command == "fit-flight":
+            from .calibration import read_calibration
+            from .flight import fit_flight
+
+            calibration = read_calibration(video, json.loads(args.calibration.read_text(encoding="utf-8")))
+            if calibration.camera is None:
+                raise ValueError("fit-flight requires a full camera calibration with K, R and t")
+            ball_report = json.loads(args.ball_track.read_text(encoding="utf-8"))
+            points = read_ball_track(video, ball_report)
+            fit = fit_flight(video, calibration.camera, points, args.start_frame, args.end_frame)
+            report = {
+                **fit.diagnostics,
+                "video_sha256": ball_report["video_sha256"],
+                "metric_track": asdict(fit.track) if fit.track is not None else None,
+                "speed": summarize_speed(video, Shot(args.start_frame, args.end_frame), fit.track),
+            }
+            print(json.dumps(report, indent=2, allow_nan=False))
             return
         if args.command in ("track", "track-wasb"):
             if args.model_source is not None:
