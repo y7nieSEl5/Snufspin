@@ -41,3 +41,5 @@ To run on the original files:
 python -m benchmarks.calibration.compare_detectors data/gridtracknet-samples/Amateur*.mp4 \
   --output outputs/texflip-court-detection/originals
 ```
+
+See the [fixed-camera paint experiment](farin-paint.md) for the later three-way comparison using these cached segments.
