@@ -34,3 +34,17 @@ class CourtPaintTests(unittest.TestCase):
         points, _, visible = _sample_segment(np.array([[-10., 7.], [-3., 19.]]), 1280, 720)
         self.assertEqual(visible, 0)
         self.assertEqual(len(points), 0)
+
+    def test_refinement_reduces_a_shift_on_withheld_paint(self):
+        from snufspin.court_paint import refine_paint_mapping, score_mapping
+
+        mapping, image, _ = self.frame_fixture()
+        shifted = CourtMapping([[1, 0, 0], [0, 1, 5], [0, 0, 1]] @ mapping.H)
+        frames = {i: image for i in range(4)}
+        seed = score_mapping(shifted, frames)
+        refined, diagnostics = refine_paint_mapping(seed, frames)
+        self.assertEqual(diagnostics["refinement_status"], "accepted")
+        self.assertEqual(diagnostics["held_out_frames"], [1, 3])
+        self.assertGreater(diagnostics["held_out_score_after"], diagnostics["held_out_score_before"])
+        sample = np.array([0, 0])
+        self.assertLess(np.linalg.norm(refined.mapping.project(sample) - mapping.project(sample)), 5)
