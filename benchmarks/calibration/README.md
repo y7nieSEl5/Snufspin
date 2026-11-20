@@ -22,7 +22,9 @@ I sampled the first frame at or after 25, 300, and 700 seconds in each clip. The
 
 All reference cameras are above the surface and see the court at positive depth. The manual solver recovered a full camera on all three clips with the resized supplied intrinsics. The refit camera centers were 4–10 cm from the published centers. With no intrinsics, the two oblique SW views passed the self-calibration checks, while the N view kept the court mapping only.
 
-The pretrained model was tested separately on clips from the local GridTrackNet sample set. The professional hardcourt clip passed the multi-frame marking check and retained its plane mapping. Its focal/pose solve failed. The professional clay and grass samples had inconsistent fits across frames. The three amateur samples did not yield marking-supported homographies.
+The pretrained model produced at most two usable landmarks per frame on the same nine CalTennis frames. The reference import and manual landmarks supplied the usable calibrations for those views.
+
+The pretrained model was also tested on clips from the local GridTrackNet sample set. The professional hardcourt clip passed the multi-frame marking check and retained its plane mapping. Its focal/pose solve failed. The professional clay and grass samples had inconsistent fits across frames. The three amateur samples did not yield marking-supported homographies.
 
 ## Reproduce
 
@@ -32,7 +34,7 @@ From the repository root, run the validator with the three matching files in `da
 python -m benchmarks.calibration.validate_caltennis
 ```
 
-The per-clip folders under `outputs/court-calibration/caltennis` contain the video-bound camera sidecars, PNG overlays, per-landmark residuals for all four transforms, and manual fits with and without supplied intrinsics. Cyan traces are the resized reference projections. Green crosses mark the reviewed observations. Use `--clip 03_04`, `--clip 03_09`, or `--clip 10_02` to run one clip. The Mar 4 camera is the reference for an initial fitter test because its view shows both court directions and its manual refit is closest to the published center.
+The per-clip folders under `outputs/court-calibration/caltennis` contain the video-bound camera sidecars, PNG overlays, per-landmark residuals for all four transforms, and manual fits with and without supplied intrinsics. Cyan traces are the resized reference projections. Green crosses mark the reviewed observations. Use `--clip 03_04`, `--clip 03_09`, or `--clip 10_02` to run one clip. The checked sidecars are committed under [references](references). Use the [Mar 4 camera](references/03_04_2026_17_42_22_000_1_SW_18_25_20_878.camera.json) for an initial fitter test. Its view shows both court directions and its manual refit is closest to the published center.
 
 To inspect the encoded dimensions and crop metadata for a clip:
 
