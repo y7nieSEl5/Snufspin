@@ -21,8 +21,9 @@ def add_court_commands(commands):
     fit.add_argument("video", type=Path)
     fit.add_argument("--landmarks", type=Path, help="JSON map of frame indices to named source pixels")
     fit.add_argument("--intrinsics", type=Path, help="JSON with decoded width, height, K and optional distortion")
-    fit.add_argument("--model-source", type=Path, default=DETECTOR / "TennisCourtDetector/tracknet.py")
-    fit.add_argument("--weights", type=Path, default=DETECTOR / "model.pth")
+    fit.add_argument("--detector", choices=("heatmap", "texflip"), default="heatmap")
+    fit.add_argument("--model-source", type=Path, help="heatmap model Python file or TEXflip checkout")
+    fit.add_argument("--weights", type=Path, help="checkpoint for the selected detector")
     fit.add_argument("--device", choices=("cpu", "cuda", "mps"), default="cpu")
     fit.add_argument("--threads", type=int, default=4)
     fit.add_argument("--samples", type=int, default=7, help="number of evenly spaced frame samples")
@@ -111,10 +112,21 @@ def run_court_command(video, args, parser):
         intrinsics = Intrinsics(supplied["K"], supplied.get("distortion"))
     indexes = sample_indices(video, args.samples)
     if args.landmarks is None:
-        detector = TennisCourtDetector(args.model_source, args.weights, args.device, args.threads)
-        source = detector.source
         frames = dict(read_sample_frames(video, indexes))
-        landmarks = {index: detector(frame) for index, frame in frames.items()}
+        if args.detector == "texflip":
+            from .letr import LETR
+            from .line_court import fit_lines
+
+            detector = LETR(args.model_source or DETECTOR / "texflip",
+                            args.weights or DETECTOR / "letr_best_checkpoint.pth",
+                            args.device, args.threads)
+            landmarks = {index: fit_lines(detector(frame), video.width, video.height)
+                         for index, frame in frames.items()}
+        else:
+            detector = TennisCourtDetector(args.model_source or DETECTOR / "TennisCourtDetector/tracknet.py",
+                                           args.weights or DETECTOR / "model.pth", args.device, args.threads)
+            landmarks = {index: detector(frame) for index, frame in frames.items()}
+        source = detector.source
     else:
         data = read_json(args.landmarks)
         landmarks = {int(index): points for index, points in data.items()}
