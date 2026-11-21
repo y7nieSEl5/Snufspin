@@ -2,6 +2,8 @@
 
 Snufspin is an offline tennis shot analysis framework. Its default ball tracker is the official WASB Tennis model at stride 1, with measured positions in source pixels. The shot analysis command also accepts manual observations, with optional shot labels and metric trajectories.
 
+For research choices, benchmark outcomes, and experiments still to try, see the [trajectory decision log](docs/trajectory-decisions.md).
+
 ## Set up the local tracker
 
 Use Python 3.10+ and FFmpeg with `ffprobe` and `libx264` on your `PATH`. Install the tracking dependencies and download the pinned WASB code and Tennis checkpoint once.
