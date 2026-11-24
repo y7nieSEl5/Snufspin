@@ -183,6 +183,7 @@ def overlay(frame, mapping, traces, title, path):
     text("Cyan: fixed projection | orange: paired ridge measurements", (20, 55))
     if not cv2.imwrite(str(path), image):
         raise OSError(f"could not write {path}")
+    return image
 
 
 def main():
@@ -197,6 +198,7 @@ def main():
     report = {}
     for label, seeds in SEEDS.items():
         prefix = CLIPS[label][:5]
+        preview_rows = []
         gray_frames = [cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) for frame in frames[label]]
         registrations = {
             (source, i): register_scene(gray_frames[source], frame)
@@ -211,16 +213,22 @@ def main():
                 raise ValueError(f"invalid seed mapping for {label} {source_index}")
             lines, traces = transfer(mapping, gray_frames, source)
             targets = []
+            previews = []
             for i, frame in enumerate(frames[label]):
                 index = fits[label][i]["index"]
                 seconds = fits[label][i]["time_s"]
                 name = f"{prefix}-{source_index}-{mode}-to-{index}.png"
                 title = f"{label} | {fits[label][source]['time_s']:.0f} s {mode} -> {seconds:.0f} s"
-                overlay(frame, mapping, traces[i], title, args.output / name)
+                image = overlay(frame, mapping, traces[i], title, args.output / name)
+                previews.append(cv2.resize(image, (960, 544), interpolation=cv2.INTER_AREA))
                 motion = scene_motion(mapping, registrations.get((source, i)), frame.shape[:2])
                 targets.append({"index": index, "time_s": seconds, "overlay": name,
                                 "scene_motion": motion, "markings": lines[i]})
             report[label].append({"source_index": source_index, "mode": mode, "targets": targets})
+            preview_rows.append(np.hstack(previews))
+        path = args.output / f"{prefix}-transfer.jpg"
+        if not cv2.imwrite(str(path), np.vstack(preview_rows), [cv2.IMWRITE_JPEG_QUALITY, 91]):
+            raise OSError(f"could not write {path}")
     (args.output / "transfer.json").write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
 
 
