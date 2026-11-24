@@ -1,0 +1,17 @@
+{
+  "Mar 4 SW": [
+    {"index": 1499, "time_s": 25.012515, "bgr_sha256": "223e33bc645854d6503a401e245d46c3424bd2e6ac6b910aa74dd6653f176120"},
+    {"index": 17979, "time_s": 300.0, "bgr_sha256": "044d054abf247119eec507b5f7812d1d8d59bbb31f70a04f344d05a2ac3a8b80"},
+    {"index": 41951, "time_s": 700.0, "bgr_sha256": "ae8d5dc7adf940878b0cae324525ce96732f1da123b927a658cea8797e256de9"}
+  ],
+  "Mar 9 SW": [
+    {"index": 1499, "time_s": 25.008342, "bgr_sha256": "8ef395d675b0151bd8280f1d3e56e342229b4d7afe020c4ec23b9b29cb861a5e"},
+    {"index": 17982, "time_s": 300.0, "bgr_sha256": "7cb8984f2e12464824a4bbd038979691f7872ef24b63604240c4c0b89eddd96e"},
+    {"index": 41958, "time_s": 700.0, "bgr_sha256": "a71d788904e29567fa845afe107bc27025ba9376efe7021ec130b77770df8df3"}
+  ],
+  "Oct 2 N": [
+    {"index": 1499, "time_s": 25.008342, "bgr_sha256": "9a0f2098e96db14b1562522cde559cdcaa85b412fd6f4074c4649057cdf4af46"},
+    {"index": 17982, "time_s": 300.0, "bgr_sha256": "24da3b1894304ddcf0b02542c5e748b4a2d414d566f351b4f2bf768c04046655"},
+    {"index": 41958, "time_s": 700.0, "bgr_sha256": "97092dcbeb9ddcae259eccf066b518d19119c1d1511372d2d34a50df5d00d21f"}
+  ]
+}
