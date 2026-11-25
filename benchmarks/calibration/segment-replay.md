@@ -32,6 +32,18 @@ Numbers are p90 projection errors in decoded pixels across the 14 template landm
 
 On Mar 4, VP grouping produces a homography in all three frames through both fitting paths. The largest between-frame p90 spread over the 14 template landmarks is 19.0 px with crossings and 50.4 px with matched segments. The same spread for VP + segments reaches 1343.0 px on Mar 9. For Oct 2, the slope and VP paths produce identical matched-segment fits, with 217.8 px maximum between-frame spread. The per-frame paint check passes even on some overlays with large reference discrepancies.
 
+## Visual review
+
+The reviewer gave these observations at the frame level.
+
+| View | 25 s | 300 s | 700 s |
+| --- | --- | --- | --- |
+| Mar 4 SW | Solid | Messy | Messy |
+| Mar 9 SW | | | Looked generally correct |
+| Oct 2 N | Looked okay | | Looked okay |
+
+The reviewer described Mar 9 as troublesome overall. Blank cells indicate that no separate assessment was given for that timestamp.
+
 ## Reproduce
 
 ```bash
