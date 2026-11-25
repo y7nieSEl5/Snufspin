@@ -24,8 +24,9 @@ def add_court_commands(commands):
     fit.add_argument("--landmarks", type=Path, help="JSON map of frame indices to named source pixels")
     fit.add_argument("--intrinsics", type=Path, help="JSON with decoded width, height, K and optional distortion")
     fit.add_argument("--detector", choices=("heatmap", "texflip"), default="texflip")
-    fit.add_argument("--solver", choices=("crossings", "vp-segments"), default="crossings",
-                     help="fit named crossings or vanishing-grouped segments with fixed pinhole intrinsics")
+    fit.add_argument("--solver", choices=("crossings", "vp-segments"),
+                     help="default: vp-segments with GeoCalib for automatic TEXflip calibration; "
+                          "crossings for --landmarks, --detector heatmap, or --paint-fallback")
     fit.add_argument("--geocalib-weights", type=Path,
                      help="local GeoCalib pinhole checkpoint for vp-segments without --intrinsics")
     fit.add_argument("--paint-fallback", action=BooleanOptionalAction, default=False,
@@ -132,8 +133,10 @@ def run_court_command(video, args, parser):
             write_overlay(args.review_dir / f"frame-{index:06}.png", frame, calibration.mapping, camera=camera)
         return
 
-    direct = args.solver == "vp-segments"
-    if direct and (args.landmarks is not None or args.detector != "texflip" or args.paint_fallback):
+    crossings_input = args.landmarks is not None or args.detector != "texflip" or args.paint_fallback
+    solver = args.solver or ("crossings" if crossings_input else "vp-segments")
+    direct = solver == "vp-segments"
+    if direct and crossings_input:
         raise ValueError("--solver vp-segments requires TEXflip without --landmarks or --paint-fallback")
     if args.geocalib_weights is not None and (not direct or args.intrinsics is not None):
         raise ValueError("--geocalib-weights requires --solver vp-segments without --intrinsics")
