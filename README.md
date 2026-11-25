@@ -102,8 +102,9 @@ Snufspin uses NTT Communications' WASB Tennis model and builds on Philipp Dubach
 
 ## Fixed-camera court calibration
 
-`calibrate-court` defaults to TEXflip's tennis-trained LETR detector. Install its optional
-dependencies and the tested source and checkpoint before running it.
+`calibrate-court` defaults to TEXflip's tennis-trained LETR detector and the
+vanishing-direction segment solver. Install the detector dependencies, source and
+checkpoint before running it.
 
 ```bash
 python -m pip install -r requirements-texflip.txt
@@ -116,39 +117,35 @@ Save the [published checkpoint](https://drive.google.com/file/d/1kgPfxeYMSED6bu0
 as `data/tennis-court/letr_best_checkpoint.pth`. Its SHA-256 is
 `0f088c6f4dfef766bd10adc401e5012d255c07d699d9afae98da5976f821d829`.
 
+Install the [GeoCalib inference package](https://github.com/cvg/GeoCalib#setup-and-demo)
+for automatic intrinsics estimation. GeoCalib can download its official pinhole weights
+on first use. Use `--geocalib-weights PATH` to load a local checkpoint.
+
 ```bash
 python -m snufspin calibrate-court input.mp4 --review-dir outputs/court-review > input.camera.json
 ```
 
-For fixed-camera footage, pass `--paint-fallback` to try Farin-style shared paint selection
-when TEXflip's individually supported frame fits disagree. The fallback keeps the original
-decision for successful fits and other rejection categories. It writes a court-plane mapping
-when a clear winner has paint support in both directions across multiple frames. A tied
-selection leaves the clip unresolved. The `review-dir` diagnostics record which path fired.
+This command estimates one fixed pinhole camera from the video. It takes the median
+GeoCalib intrinsics across seven sampled frames, groups TEXflip segments by vanishing
+direction, and fits the pose directly from matched line fragments. With seven samples,
+at least four must support the selected pose through matched segments and visible paint
+in both court directions. The selected camera uses the matcher's court labeling, which
+can differ by 180° from an external reference. Run the same command for blind CalTennis
+calibration and use the published calibration separately for benchmark scoring.
 
-For a fixed pinhole camera, opt into the vanishing-direction segment solver:
-
-```bash
-python -m snufspin calibrate-court input.mp4 --solver vp-segments \
-  --intrinsics input.intrinsics.json --review-dir outputs/court-review > input.camera.json
-```
-
-Omit `--intrinsics` to use the median GeoCalib pinhole estimate across the sampled frames.
-Install the optional [GeoCalib inference package](https://github.com/cvg/GeoCalib#setup-and-demo)
-for this mode. GeoCalib can download its official pinhole weights on first use, or
-`--geocalib-weights PATH` can point to a local checkpoint. The solver groups TEXflip
-segments by vanishing direction, fits pose with fixed intrinsics, and requires support
-from matched segments and visible paint in both court directions across multiple frames.
-The selected camera uses the matcher's court labeling, which can differ by 180° from
-an externally labeled court. The default `--solver crossings` remains available.
-
-`--detector heatmap` selects the older TennisCourtDetector, using its
+Explicit `--intrinsics` accepts a camera matrix in decoded pixels, with `width`, `height`,
+`K` and optional OpenCV `distortion`. The segment solver requires zero distortion.
+Select `--solver crossings` for the crossing-based fit. `--detector heatmap`,
+`--landmarks`, and `--paint-fallback` also select that solver when `--solver` is omitted.
+`--detector heatmap` uses the older TennisCourtDetector with its
 [published source and checkpoint](https://github.com/yastrebksv/TennisCourtDetector#pretrained-model).
 `--landmarks` supplies manual source-pixel points as a JSON object keyed by zero-based frame
-index and [court landmark name](snufspin/court.py). `--intrinsics` accepts decoded `width`,
-`height`, `K` and optional OpenCV `distortion`. For a supplied CalTennis camera, use
-`import-caltennis VIDEO CALIBRATION` with an explicit `--pixel-transform` for a size
-mismatch. Use `review-court VIDEO SIDECAR --review-dir DIR` to inspect the court overlay.
+index and [court landmark name](snufspin/court.py). The TEXflip crossings solver's
+`--paint-fallback` tries a shared plane fit when individually supported frame fits disagree.
+
+For an explicit CalTennis benchmark reference, use `import-caltennis VIDEO CALIBRATION`
+with a `--pixel-transform` when the published and decoded dimensions differ.
+Use `review-court VIDEO SIDECAR --review-dir DIR` to inspect the court overlay.
 
 The JSON sidecar is tied to the exact video. It contains the metric court-plane mapping
 and, when available, the full camera `K, R, t`. A plane-only sidecar supports court-contact
