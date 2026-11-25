@@ -20,9 +20,12 @@ def estimate_intrinsics(frames, device, weights=None):
             raise
         raise ValueError("install GeoCalib to estimate intrinsics, or pass --intrinsics") from error
 
-    model = GeoCalib(weights=str(weights) if weights is not None else "pinhole").to(device).eval()
     matrices = []
-    with torch.no_grad():
+    # GeoCalib initializes its matrix decomposition from the CPU generator,
+    # including when the image is on an accelerator.
+    with torch.random.fork_rng(devices=[]), torch.no_grad():
+        torch.random.default_generator.manual_seed(0)
+        model = GeoCalib(weights=str(weights) if weights is not None else "pinhole").to(device).eval()
         for bgr in frames.values():
             rgb = cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)
             image = torch.from_numpy(rgb).permute(2, 0, 1).to(device=device, dtype=torch.float32) / 255
