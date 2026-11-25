@@ -24,6 +24,10 @@ def add_court_commands(commands):
     fit.add_argument("--landmarks", type=Path, help="JSON map of frame indices to named source pixels")
     fit.add_argument("--intrinsics", type=Path, help="JSON with decoded width, height, K and optional distortion")
     fit.add_argument("--detector", choices=("heatmap", "texflip"), default="texflip")
+    fit.add_argument("--solver", choices=("crossings", "vp-segments"), default="crossings",
+                     help="fit named crossings or vanishing-grouped segments with fixed pinhole intrinsics")
+    fit.add_argument("--geocalib-weights", type=Path,
+                     help="local GeoCalib pinhole checkpoint for vp-segments without --intrinsics")
     fit.add_argument("--paint-fallback", action=BooleanOptionalAction, default=False,
                      help="try shared paint selection when TEXflip frame fits disagree on a fixed-camera clip")
     fit.add_argument("--model-source", type=Path, help="heatmap model Python file or TEXflip checkout")
@@ -128,12 +132,19 @@ def run_court_command(video, args, parser):
             write_overlay(args.review_dir / f"frame-{index:06}.png", frame, calibration.mapping, camera=camera)
         return
 
+    direct = args.solver == "vp-segments"
+    if direct and (args.landmarks is not None or args.detector != "texflip" or args.paint_fallback):
+        raise ValueError("--solver vp-segments requires TEXflip without --landmarks or --paint-fallback")
+    if args.geocalib_weights is not None and (not direct or args.intrinsics is not None):
+        raise ValueError("--geocalib-weights requires --solver vp-segments without --intrinsics")
     intrinsics = None
     if args.intrinsics is not None:
         supplied = read_json(args.intrinsics)
         if (supplied["width"], supplied["height"]) != (video.width, video.height):
             raise ValueError("supplied intrinsics must already be expressed in decoded video pixels")
         intrinsics = Intrinsics(supplied["K"], supplied.get("distortion"))
+        if direct and intrinsics.distortion is not None and np.any(intrinsics.distortion):
+            raise ValueError("--solver vp-segments requires pinhole intrinsics with zero distortion")
     indexes = sample_indices(video, args.samples)
     segments = None
     if args.landmarks is None:
@@ -146,7 +157,9 @@ def run_court_command(video, args, parser):
                             args.weights or DETECTOR / "letr_best_checkpoint.pth",
                             args.device, args.threads)
             segments = {index: refine_segments(frame, detector(frame)) for index, frame in frames.items()}
-            landmarks = {index: fit_lines(lines, video.width, video.height) for index, lines in segments.items()}
+            landmarks = {} if direct else {
+                index: fit_lines(lines, video.width, video.height) for index, lines in segments.items()
+            }
         else:
             detector = TennisCourtDetector(args.model_source or DETECTOR / "TennisCourtDetector/tracknet.py",
                                            args.weights or DETECTOR / "model.pth", args.device, args.threads)
@@ -161,11 +174,22 @@ def run_court_command(video, args, parser):
     source["intrinsics_method"] = "supplied" if intrinsics else "centered_vanishing_directions"
     if args.intrinsics is not None:
         source["intrinsics_sha256"] = file_sha256(args.intrinsics)
-    calibration, diagnostics = fit_court(frames, landmarks, source, intrinsics)
+    if direct:
+        from .court_segments import fit_court_segments
+
+        if intrinsics is None:
+            from .geocalib import estimate_intrinsics
+
+            intrinsics, provenance = estimate_intrinsics(frames, args.device, args.geocalib_weights)
+            source.update(provenance)
+        calibration, diagnostics = fit_court_segments(frames, segments, source, intrinsics)
+    else:
+        calibration, diagnostics = fit_court(frames, landmarks, source, intrinsics)
     if (args.paint_fallback and segments is not None
             and calibration is None and diagnostics["status"] == "inconsistent_court_across_frames"):
         calibration = _try_paint_fallback(frames, segments, intrinsics, source, diagnostics)
-    diagnostics["landmarks"] = landmarks
+    if not direct:
+        diagnostics["landmarks"] = landmarks
     if args.review_dir is not None:
         args.review_dir.mkdir(parents=True, exist_ok=True)
         (args.review_dir / "diagnostics.json").write_text(

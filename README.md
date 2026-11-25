@@ -126,6 +126,22 @@ decision for successful fits and other rejection categories. It writes a court-p
 when a clear winner has paint support in both directions across multiple frames. A tied
 selection leaves the clip unresolved. The `review-dir` diagnostics record which path fired.
 
+For a fixed pinhole camera, opt into the vanishing-direction segment solver:
+
+```bash
+python -m snufspin calibrate-court input.mp4 --solver vp-segments \
+  --intrinsics input.intrinsics.json --review-dir outputs/court-review > input.camera.json
+```
+
+Omit `--intrinsics` to use the median GeoCalib pinhole estimate across the sampled frames.
+Install the optional [GeoCalib inference package](https://github.com/cvg/GeoCalib#setup-and-demo)
+for this mode. GeoCalib can download its official pinhole weights on first use, or
+`--geocalib-weights PATH` can point to a local checkpoint. The solver groups TEXflip
+segments by vanishing direction, fits pose with fixed intrinsics, and requires support
+from matched segments and visible paint in both court directions across multiple frames.
+The selected camera uses the matcher's court labeling, which can differ by 180° from
+an externally labeled court. The default `--solver crossings` remains available.
+
 `--detector heatmap` selects the older TennisCourtDetector, using its
 [published source and checkpoint](https://github.com/yastrebksv/TennisCourtDetector#pretrained-model).
 `--landmarks` supplies manual source-pixel points as a JSON object keyed by zero-based frame
