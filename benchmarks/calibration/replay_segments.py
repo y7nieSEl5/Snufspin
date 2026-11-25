@@ -3,7 +3,6 @@
 import argparse
 from bisect import bisect_left
 import hashlib
-from itertools import combinations
 import json
 from pathlib import Path
 
@@ -14,11 +13,12 @@ import torch
 from snufspin.calibration import CourtMapping
 from snufspin.court import DOUBLES_WIDTH, LANDMARKS, LENGTH, LINES
 from snufspin.court_commands import DETECTOR, import_caltennis
-from snufspin.court_fit import _fit_mapping, _physical_court
+from snufspin.court_fit import _fit_mapping
 from snufspin.court_review import marking_support, markings_agree
+from snufspin.court_segments import best_vp_hypothesis, direct_mapping
 from snufspin.letr import LETR
 from snufspin.line_court import (
-    _CROSS, _PAINT, _intersections, _line_hypotheses, _prepare_segments, refine_segments,
+    _intersections, _line_hypotheses, _prepare_segments, refine_segments,
 )
 from snufspin.video import Video, read_sample_frames
 
@@ -26,8 +26,6 @@ from .estimate import CLIPS, TIMES_S, probe_sample_video
 
 OUTPUT = Path("outputs/caltennis-segment-replay")
 MANIFEST = Path(__file__).with_name("replay-frames.json")
-VP_TOLERANCE = np.sin(np.deg2rad(4))
-VP_PARTITIONS = 12
 
 
 def replay(videos, output):
@@ -54,91 +52,11 @@ def replay(videos, output):
     return observations
 
 
-def vp_partitions(segments, lengths, equations):
-    """Propose two pencils of lines by angular agreement with homogeneous VPs."""
-    if len(segments) < 4:
-        return
-    points = np.cross(*np.moveaxis(equations[np.array(list(combinations(range(len(segments)), 2)))], 1, 0))
-    # Center and scale the projective coordinates before measuring angular errors.
-    center = segments.mean(axis=(0, 1))
-    scale = np.ptp(segments.reshape(-1, 2), axis=0).max()
-    if scale <= 0:
-        return
-    points[:, :2] = (points[:, :2] - points[:, 2:] * center) / scale
-    points = points[np.linalg.norm(points, axis=1) > 1e-9]
-    points /= np.linalg.norm(points, axis=1, keepdims=True)
-    midpoints = (segments.mean(axis=1) - center) / scale
-    vectors = points[:, None, :2] - points[:, None, 2:] * midpoints
-    sine_error = np.abs(np.einsum("pnd,nd->pn", vectors, equations[:, :2]))
-    magnitude = np.linalg.norm(vectors, axis=2)
-    sine_error = np.divide(sine_error, magnitude, out=np.ones_like(sine_error), where=magnitude > 1e-9)
-
-    partitions = {}
-    indexes = np.arange(len(segments))
-    for a, b in combinations(range(len(points)), 2):
-        first = sine_error[a] <= sine_error[b]
-        best_error = np.minimum(sine_error[a], sine_error[b])
-        included = best_error <= VP_TOLERANCE
-        groups = (tuple(indexes[first & included][:12]), tuple(indexes[~first & included][:12]))
-        if min(map(len, groups)) < 2:
-            continue
-        # Require that each assigned pencil has support distinct from the other pencil.
-        difference = np.abs(sine_error[a] - sine_error[b])
-        if min(np.count_nonzero(difference[list(group)] >= VP_TOLERANCE / 2) for group in groups) < 2:
-            continue
-        score = float(np.sum(np.sqrt(lengths) * np.maximum(0, 1 - best_error / VP_TOLERANCE)))
-        key = tuple(sorted(groups))
-        previous = partitions.get(key)
-        if previous is None or score > previous[0]:
-            vps = points[[a, b]].copy()
-            vps[:, :2] = vps[:, :2] * scale + vps[:, 2:] * center
-            partitions[key] = score, groups, vps
-
-    for _, groups, vps in sorted(partitions.values(), key=lambda x: -x[0])[:VP_PARTITIONS]:
-        yield np.array(groups[0]), np.array(groups[1]), vps
-        yield np.array(groups[1]), np.array(groups[0]), vps[::-1]
-
-
-def direct_mapping(matches, equations, width, height):
-    """Fit H from endpoint-on-supporting-line constraints in normalized coordinates."""
-    model_ids = list(matches)
-    across = sum(list(LINES)[i] in _CROSS for i in model_ids)
-    if min(across, len(matches) - across) < 2:
-        return None
-
-    image_normalizer = np.array([[1 / width, 0, -0.5], [0, 1 / width, -height / (2 * width)], [0, 0, 1]])
-    court_scale = np.ptp(_PAINT[:, :, 0])
-    center = (_PAINT.max(axis=(0, 1)) + _PAINT.min(axis=(0, 1))) / 2
-    court_normalizer = np.eye(3)
-    court_normalizer[:2, :2] /= court_scale
-    court_normalizer[:2, 2] = -center / court_scale
-    image_to_pixels = np.linalg.inv(image_normalizer)
-    lines = equations[list(matches.values())] @ image_to_pixels
-    lines /= np.linalg.norm(lines[:, :2], axis=1, keepdims=True)
-    model = np.concatenate((_PAINT[model_ids], np.ones((len(matches), 2, 1))), axis=-1)
-    model = model @ court_normalizer.T
-    constraints = np.einsum("ni,nkj->nkij", lines, model).reshape(-1, 9)
-    _, singular_values, basis = np.linalg.svd(constraints)
-    if singular_values[7] < 1e-8 * singular_values[0]:
-        return None
-    H = image_to_pixels @ basis[-1].reshape(3, 3) @ court_normalizer
-    if np.linalg.matrix_rank(H) != 3:
-        return None
-    mapping = CourtMapping(H)
-    return mapping if _physical_court(mapping) else None
-
-
 def fit_candidates(frame, prepared):
     height, width = frame.shape[:2]
-    segments, lengths, equations, steep, shallow = prepared
+    segments, _, equations, steep, shallow = prepared
     slope = (steep, shallow, None)
-    vp = None
-    for groups in vp_partitions(segments, lengths, equations):
-        along, across, _ = groups
-        candidates = _line_hypotheses(segments, equations, along, across, width, height, 1)
-        if candidates and (vp is None or candidates[0][0] > vp[0][0]):
-            vp = (candidates[0], groups)
-
+    vp = best_vp_hypothesis(prepared, width, height)
     primary = _line_hypotheses(segments, equations, steep, shallow, width, height, 1)
     return {"slope": (primary[0] if primary else None, slope),
             "vp": vp or (None, (np.array([], dtype=int), np.array([], dtype=int), None))}
